@@ -1,37 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ashwani Singh — Portfolio
+
+Personal portfolio and freelance presence site for **Ashwani Kumar Singh**, a Mobile Product Engineer specializing in Flutter, Go, and AWS.
+
+Live at → [ashwanisingh.dev](https://ashwanisingh.dev)
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 + styled-jsx |
+| Icons | Lucide React |
+| Fonts | Outfit · Plus Jakarta Sans (Google Fonts) |
+| Email | Resend |
+| Analytics | Vercel Analytics + Speed Insights |
+| Deployment | Vercel |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx                  # Homepage
+│   ├── layout.tsx                # Root layout, SEO metadata, fonts
+│   ├── globals.css               # Design system — CSS variables, base styles
+│   ├── about/page.tsx            # About + career timeline
+│   ├── projects/
+│   │   ├── page.tsx              # Filterable case studies
+│   │   └── closepitch/page.tsx   # ClosePitch flagship case study
+│   ├── services/page.tsx         # Service offerings
+│   ├── experience/page.tsx       # Experience detail
+│   ├── contact/page.tsx          # Contact form
+│   ├── blog/
+│   │   ├── page.tsx              # Blog listing
+│   │   └── [slug]/page.tsx       # Dynamic blog post
+│   ├── resume/page.tsx           # Resume viewer
+│   ├── now/page.tsx              # Now page
+│   ├── process/page.tsx          # Engineering process
+│   ├── thinking/page.tsx         # Philosophy
+│   ├── labs/page.tsx             # Experimental projects
+│   ├── actions/contact.ts        # Server action — contact form
+│   ├── sitemap.ts                # Auto-generated sitemap
+│   └── robots.ts                 # robots.txt
+├── components/
+│   ├── Header.tsx                # Fixed nav, mobile drawer
+│   ├── Footer.tsx                # Links, availability banner, social icons
+│   ├── QuickChat.tsx             # Floating WhatsApp button
+│   └── ScrollObserver.tsx        # Intersection observer for scroll animations
+└── config/
+    └── availability.json         # Controls footer availability banner
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Production build
+npm run build
+npm run start
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Lint
+npm run lint
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Availability Banner
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Edit `src/config/availability.json` to update the footer banner:
 
-## Deploy on Vercel
+```json
+{
+  "status": "available",
+  "text": "Available for Freelance",
+  "nextSlot": "August 2026",
+  "showBanner": true
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set `"showBanner": false` to hide it, or `"status": "unavailable"` to change the indicator color.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Portfolio
+### SEO & Metadata
+
+Global metadata (title, description, OG image, Twitter card) is configured in `src/app/layout.tsx`. Update `metadataBase` to match your live domain.
+
+---
+
+## Deployment
+
+Deployed on Vercel. Push to `main` triggers an automatic production deployment.
+
+To deploy manually:
+
+```bash
+vercel --prod
+```
+
+---
+
+## Contact
+
+- Email: [ashwanicena5@gmail.com](mailto:ashwanicena5@gmail.com)
+- LinkedIn: [linkedin.com/in/ashwanisng](https://linkedin.com/in/ashwanisng)
+- GitHub: [github.com/ashwanisng](https://github.com/ashwanisng)
