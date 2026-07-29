@@ -2,7 +2,7 @@
 
 Personal portfolio and freelance presence site for **Ashwani Kumar Singh**, a Mobile Product Engineer specializing in Flutter, Go, and AWS.
 
-Live at → [ashwanisingh.dev](https://ashwanisingh.dev)
+Live at → [ashwanisng.com](https://ashwanisng.com/)
 
 ---
 
