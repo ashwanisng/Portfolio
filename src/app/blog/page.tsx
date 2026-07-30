@@ -115,7 +115,7 @@ export default function Blog() {
                     <div className="blog-share-row">
                       <span className="share-lbl">Share:</span>
                       <a
-                        href={`https://linkedin.com/sharing/share-offsite/?url=https://ashwanisingh.dev/blog/${featuredPost.slug}`}
+                        href={`https://linkedin.com/sharing/share-offsite/?url=https://ashwanisng.com/blog/${featuredPost.slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="share-link-btn"
@@ -125,7 +125,7 @@ export default function Blog() {
                       </a>
                       <span className="share-divider">/</span>
                       <a
-                        href={`https://twitter.com/intent/tweet?url=https://ashwanisingh.dev/blog/${featuredPost.slug}&text=${encodeURIComponent(featuredPost.title)}`}
+                        href={`https://twitter.com/intent/tweet?url=https://ashwanisng.com/blog/${featuredPost.slug}&text=${encodeURIComponent(featuredPost.title)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="share-link-btn"
@@ -218,7 +218,7 @@ export default function Blog() {
                       <div className="blog-share-row">
                         <span className="share-lbl">Share:</span>
                         <a
-                          href={`https://linkedin.com/sharing/share-offsite/?url=https://ashwanisingh.dev/blog/${post.slug}`}
+                          href={`https://linkedin.com/sharing/share-offsite/?url=https://ashwanisng.com/blog/${post.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="share-link-btn"
@@ -228,7 +228,7 @@ export default function Blog() {
                         </a>
                         <span className="share-divider">/</span>
                         <a
-                          href={`https://twitter.com/intent/tweet?url=https://ashwanisingh.dev/blog/${post.slug}&text=${encodeURIComponent(post.title)}`}
+                          href={`https://twitter.com/intent/tweet?url=https://ashwanisng.com/blog/${post.slug}&text=${encodeURIComponent(post.title)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="share-link-btn"

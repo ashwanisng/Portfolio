@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/private/",
     },
-    sitemap: "https://ashwanisingh.dev/sitemap.xml",
+    sitemap: "https://ashwanisng.com/sitemap.xml",
   };
 }

@@ -66,6 +66,27 @@ const articleContent: Record<string, { title: string; category: string; date: st
   }
 };
 
+const BASE_URL = "https://ashwanisng.com";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = articleContent[slug];
+  if (!post) return {};
+  return {
+    title: post.title,
+    description: post.body[0].slice(0, 160),
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.body[0].slice(0, 160),
+      url: `/blog/${slug}`,
+      type: "article",
+      publishedTime: post.date,
+      authors: ["Ashwani Kumar Singh"],
+    },
+  };
+}
+
 // Generate Static Params for Next.js build compilation
 export async function generateStaticParams() {
   return [
@@ -86,8 +107,31 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.body[0].slice(0, 160),
+    author: {
+      "@type": "Person",
+      name: "Ashwani Kumar Singh",
+      url: BASE_URL,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Ashwani Kumar Singh",
+      url: BASE_URL,
+    },
+    datePublished: post.date,
+    url: `${BASE_URL}/blog/${resolvedParams.slug}`,
+  };
+
   return (
     <div className="blog-article-wrapper">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <div className="container article-container">
         <Link href="/blog" className="back-link">
           <ArrowLeft size={16} />
