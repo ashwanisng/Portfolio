@@ -76,6 +76,7 @@ export default function Header() {
 
       {/* Mobile Drawer Menu */}
       <div className={`mobile-nav-drawer ${isOpen ? "open" : ""}`}>
+        <div className="drawer-glow-orb"></div>
         <div className="mobile-drawer-inner">
           <div className="mobile-drawer-header">
             <Link href="/" className="logo-brand" onClick={() => setIsOpen(false)}>
@@ -87,11 +88,12 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
               aria-label="Close Menu"
             >
-              <X size={22} />
+              <X size={20} />
             </button>
           </div>
+          
           <nav className="mobile-drawer-nav">
-            {navLinks.map((link) => {
+            {navLinks.map((link, idx) => {
               const isActive = pathname === link.href;
               return (
                 <Link
@@ -100,19 +102,33 @@ export default function Header() {
                   className={`mobile-drawer-link ${isActive ? "active" : ""}`}
                   onClick={() => setIsOpen(false)}
                 >
-                  {link.name}
+                  <span className="drawer-link-num">0{idx + 1}</span>
+                  <span className="drawer-link-txt">{link.name}</span>
+                  {isActive && <span className="drawer-link-dot"></span>}
                 </Link>
               );
             })}
             <a
               href="/contact"
-              className="btn btn-primary m-t-20"
+              className="btn btn-primary m-t-20 mobile-drawer-cta"
               onClick={() => setIsOpen(false)}
             >
               Book a Call
-              <ArrowUpRight className="icon icon-xs" />
+              <ArrowUpRight size={16} />
             </a>
           </nav>
+
+          <div className="mobile-drawer-footer">
+            <div className="drawer-status-badge">
+              <span className="status-dot"></span>
+              <span>Available for contracts</span>
+            </div>
+            <div className="drawer-socials">
+              <a href="https://github.com/ashwanisng" target="_blank" rel="noopener noreferrer">Github</a>
+              <a href="https://linkedin.com/in/ashwanisng" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href="mailto:ashwanicena5@gmail.com">Email</a>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -218,48 +234,147 @@ export default function Header() {
           right: -100%;
           width: 100%;
           height: 100vh;
-          background: var(--bg-primary);
+          background: rgba(11, 14, 20, 0.96);
+          backdrop-filter: blur(20px);
           z-index: 1000;
-          transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow: hidden;
         }
         .mobile-nav-drawer.open {
           right: 0;
         }
+        .drawer-glow-orb {
+          position: absolute;
+          width: 300px;
+          height: 300px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, rgba(139, 92, 246, 0.02) 70%, transparent 100%);
+          bottom: -50px;
+          left: -50px;
+          filter: blur(40px);
+          pointer-events: none;
+        }
         .mobile-drawer-inner {
-          padding: 24px 20px;
+          padding: 24px 24px 48px;
           display: flex;
           flex-direction: column;
+          justify-content: space-between;
           height: 100%;
+          position: relative;
+          z-index: 2;
         }
         .mobile-drawer-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
           height: 56px;
-          margin-bottom: 30px;
         }
         .mobile-navbar-close {
           background: none;
           border: none;
           color: var(--text-secondary);
           cursor: pointer;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid var(--border-color);
         }
         .mobile-drawer-nav {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 12px;
+          margin: auto 0;
         }
         .mobile-drawer-link {
           font-family: var(--font-headings);
-          font-size: 20px;
-          font-weight: 500;
+          font-size: 26px;
+          font-weight: 600;
           color: var(--text-secondary);
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 8px 0;
+          opacity: 0;
+          transform: translateX(20px);
+          transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
         }
+        .mobile-nav-drawer.open .mobile-drawer-link {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(1) { transition-delay: 0.05s; }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(2) { transition-delay: 0.1s; }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(3) { transition-delay: 0.15s; }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(4) { transition-delay: 0.2s; }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(5) { transition-delay: 0.25s; }
+        .mobile-nav-drawer.open .mobile-drawer-link:nth-child(6) { transition-delay: 0.3s; }
+        .mobile-nav-drawer.open .mobile-drawer-cta {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.35s;
+        }
+
         .mobile-drawer-link:hover, .mobile-drawer-link.active {
           color: #fff;
-          border-color: var(--accent-blue);
+        }
+        .drawer-link-num {
+          font-family: monospace;
+          font-size: 13px;
+          color: var(--accent-blue-light);
+          opacity: 0.7;
+          width: 24px;
+        }
+        .drawer-link-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--accent-blue);
+          box-shadow: 0 0 10px var(--accent-blue);
+        }
+        .mobile-drawer-cta {
+          width: 100%;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-drawer-footer {
+          border-top: 1px solid var(--border-color);
+          padding-top: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .drawer-status-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 11px;
+          color: #10b981;
+          text-transform: uppercase;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+        }
+        .drawer-status-badge .status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 8px #10b981;
+        }
+        .drawer-socials {
+          display: flex;
+          gap: 20px;
+        }
+        .drawer-socials a {
+          font-size: 13px;
+          color: var(--text-secondary);
+        }
+        .drawer-socials a:hover {
+          color: #fff;
         }
 
         @media (max-width: 1024px) {

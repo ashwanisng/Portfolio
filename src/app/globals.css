@@ -1102,4 +1102,101 @@ select:focus-visible {
 .reveal-delay-4 { transition-delay: 0.4s; }
 .reveal-delay-5 { transition-delay: 0.5s; }
 
+/* ==========================================================================
+   RESPONSIVE OVERRIDES (MOBILE & IPAD SPACING/LAYOUT FIXES)
+   ========================================================================== */
+
+/* Tablet & iPad Portrait (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .hero-block,
+  .about-intro-section,
+  .services-intro,
+  .experience-hero,
+  .labs-hero,
+  .thinking-hero,
+  .process-hero,
+  .resume-header-section,
+  .projects-hero {
+    padding-top: 56px !important;
+    padding-bottom: 24px !important;
+  }
+
+  .why-hire-section,
+  .featured-showcase-section,
+  .services-section,
+  .testimonials-home-section,
+  .faq-section,
+  .ctas-banner-section,
+  .about-timeline-section,
+  .services-list-details,
+  .engagement-models-section,
+  .boundaries-section,
+  .experience-list-section,
+  .labs-grid-section {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+  .hero-block,
+  .about-intro-section,
+  .services-intro,
+  .experience-hero,
+  .labs-hero,
+  .thinking-hero,
+  .process-hero,
+  .resume-header-section,
+  .projects-hero {
+    padding-top: 36px !important;
+    padding-bottom: 16px !important;
+  }
+
+  .why-hire-section,
+  .featured-showcase-section,
+  .services-section,
+  .testimonials-home-section,
+  .faq-section,
+  .ctas-banner-section,
+  .about-timeline-section,
+  .services-list-details,
+  .engagement-models-section,
+  .boundaries-section,
+  .experience-list-section,
+  .labs-grid-section {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+  }
+
+  /* Spacing utility overrides */
+  .m-t-40 {
+    margin-top: 24px !important;
+  }
+  .m-t-20 {
+    margin-top: 14px !important;
+  }
+
+  /* Button alignment for mobile screens */
+  .about-ctas,
+  .hero-buttons-row {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  .about-ctas .btn,
+  .hero-buttons-row .btn {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* General typography scaling on mobile */
+  h1 {
+    font-size: 32px !important;
+  }
+  h2 {
+    font-size: 24px !important;
+  }
+}
+
 

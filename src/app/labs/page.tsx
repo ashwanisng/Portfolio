@@ -6,6 +6,22 @@ import { Folder, Compass, Cpu, Code, ArrowUpRight } from "lucide-react";
 export default function Labs() {
   const explorations = [
     {
+      title: "flutter_doctor_ai Package",
+      category: "Pub Package",
+      tech: "Flutter, Dart, AI (Gemini/OpenAI)",
+      description: "An open-source Flutter command-line tool and package that automatically scans your codebase for compilation warnings, lint issues, and runtime crashes to suggest quick-fixes using AI.",
+      outcomes: "Published package on pub.dev helping developers automate syntax fixing and dependency resolution.",
+      link: "https://pub.dev/packages/flutter_doctor_ai"
+    },
+    {
+      title: "Flutter-Starter-Bloc Template",
+      category: "Open Source",
+      tech: "Flutter, Dart, BLoC, Clean Architecture",
+      description: "A production-ready starter template repository built on Flutter using the BLoC pattern, custom dio networking client, multi-flavor environment configurations, and strict repository boundaries.",
+      outcomes: "Reduces setup time for standard enterprise-grade Flutter apps by 80%.",
+      link: "https://github.com/ashwanisng/Flutter-Starter-Bloc"
+    },
+    {
       title: "Animated-Profile Flutter App",
       category: "Open Source",
       tech: "Flutter, Dart, Figma",

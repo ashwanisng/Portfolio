@@ -522,8 +522,9 @@ export default function About() {
           }
           .intro-graphics {
             height: auto;
-            min-height: 480px;
+            min-height: auto;
             padding: 20px 0;
+            justify-content: center;
           }
           .about-principles-grid {
             grid-template-columns: repeat(2, 1fr);
