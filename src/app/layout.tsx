@@ -112,6 +112,7 @@ export default function RootLayout({
     sameAs: [
       "https://linkedin.com/in/ashwanisng",
       "https://github.com/ashwanisng",
+      "https://medium.com/@ashwanisng",
     ],
     knowsAbout: [
       "Flutter",

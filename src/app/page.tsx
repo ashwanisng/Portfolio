@@ -21,26 +21,19 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+
+
   // Testimonial State
   const [activeSlide, setActiveSlide] = useState(0);
   const testimonials = [
     {
-      quote: "Ashwani is an exceptional Flutter developer who takes complete ownership. He redesigned our app interface and always focuses on high performance and widget optimization.",
-      author: "Kartikeya Gupta",
-      title: "Co-founder, Hudle",
-      initials: "KG"
+      quote: "Ashwani is an exceptional Flutter developer who takes complete ownership. He redesigned our app interface and always focuses on high performance and widget optimization."
     },
     {
-      quote: "He has a strong product mindset, understands the big picture, and delivers robust Flutter architectures. Extremely reliable and key in streamlining our API caching and SDK tracking.",
-      author: "Vivek Mishra",
-      title: "Engineering Manager, Hudle",
-      initials: "VM"
+      quote: "He has a strong product mindset, understands the big picture, and delivers robust Flutter architectures. Extremely reliable and key in streamlining our API caching and SDK tracking."
     },
     {
-      quote: "Delivered the subscription management and tracking apps on time with a 99.5% crash-free rate. Communication was excellent and implementation was top tier.",
-      author: "Verified EverAg Manager",
-      title: "Dairy B2C Project Leader",
-      initials: "MR"
+      quote: "Delivered the subscription management and tracking apps on time with a 99.5% crash-free rate. Communication was excellent and implementation was top tier."
     }
   ];
 
@@ -492,13 +485,12 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Testimonials */}
+      {/* Testimonials with Quotes Only */}
       <section className="testimonials-home-section">
         <div className="container">
-          <div className="section-header text-center">
-            <span className="section-tag">TRUST</span>
-            <h2 className="section-title">What Colleagues & Clients Say</h2>
+          <div className="section-header text-center m-b-40">
+            <span className="section-tag">TESTIMONIALS</span>
+            <h2 className="section-title">What Clients Say About Me</h2>
           </div>
 
           <div className="testimonials-carousel-wrapper">
@@ -507,15 +499,6 @@ export default function Home() {
               <p className="testimonial-text-large">
                 {testimonials[activeSlide].quote}
               </p>
-              <div className="testimonial-author-row">
-                <div className="author-circle-avatar">
-                  {testimonials[activeSlide].initials}
-                </div>
-                <div>
-                  <h4>{testimonials[activeSlide].author}</h4>
-                  <span>{testimonials[activeSlide].title}</span>
-                </div>
-              </div>
             </div>
             
             <div className="carousel-dot-nav">
@@ -1051,12 +1034,12 @@ export default function Home() {
           font-size: 13px;
           color: var(--text-secondary);
         }
-
         /* Testimonials Carousel */
         .testimonials-home-section {
-          padding: 100px 0;
+          padding: 80px 0;
           border-top: 1px solid var(--border-color);
           border-bottom: 1px solid var(--border-color);
+          background: rgba(255,255,255,0.002);
         }
         .testimonials-carousel-wrapper {
           max-width: 720px;
@@ -1067,7 +1050,7 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 24px;
+          gap: 16px;
         }
         .quote-mark {
           font-size: 64px;
@@ -1077,45 +1060,17 @@ export default function Home() {
           height: 32px;
         }
         .testimonial-text-large {
-          font-size: 20px;
+          font-size: 22px;
           color: #fff;
           font-style: italic;
           line-height: 1.6;
-        }
-        .testimonial-author-row {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          text-align: left;
-          margin-top: 16px;
-        }
-        .author-circle-avatar {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: var(--font-headings);
-          font-weight: 700;
-          font-size: 14px;
-          color: #fff;
-          border: 2px solid var(--bg-primary);
-        }
-        .testimonial-author-row h4 {
-          font-size: 15px;
-          font-weight: 600;
-        }
-        .testimonial-author-row span {
-          font-size: 12px;
-          color: var(--text-secondary);
+          max-width: 600px;
         }
         .carousel-dot-nav {
           display: flex;
           justify-content: center;
           gap: 8px;
-          margin-top: 40px;
+          margin-top: 32px;
         }
         .dot-indicator {
           width: 8px;
