@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { logFirebaseEvent } from "../../lib/firebase";
 import { 
   Folder, 
   Cpu, 
@@ -255,6 +256,7 @@ lib/
                       onClick={() => {
                         setSelectedProjIdx(idx);
                         setActiveTab("spec");
+                        logFirebaseEvent("select_project_tab", { project: p.title });
                       }}
                       className={`sidebar-project-btn card-glass ${isActive ? "active " + p.colorTheme : ""}`}
                     >
@@ -301,6 +303,11 @@ lib/
                           target="_blank"
                           rel="noopener noreferrer"
                           className="store-link-btn playstore-btn"
+                          onClick={() => logFirebaseEvent("click_store_link", { 
+                            project: activeProject.title, 
+                            store: "play_store", 
+                            url: activeProject.playStoreUrl 
+                          })}
                         >
                           <Play size={12} fill="currentColor" />
                           <span>Google Play</span>
@@ -313,6 +320,11 @@ lib/
                           target="_blank"
                           rel="noopener noreferrer"
                           className="store-link-btn appstore-btn"
+                          onClick={() => logFirebaseEvent("click_store_link", { 
+                            project: activeProject.title, 
+                            store: "app_store", 
+                            url: activeProject.appStoreUrl 
+                          })}
                         >
                           <ExternalLink size={12} />
                           <span>App Store</span>
@@ -326,21 +338,30 @@ lib/
               {/* Console Tabs */}
               <div className="console-tab-bar">
                 <button
-                  onClick={() => setActiveTab("spec")}
+                  onClick={() => {
+                    setActiveTab("spec");
+                    logFirebaseEvent("select_console_tab", { project: activeProject.title, tab: "spec" });
+                  }}
                   className={`console-tab-btn ${activeTab === "spec" ? "active" : ""}`}
                 >
                   <Terminal size={14} />
                   <span>Spec Console</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab("architecture")}
+                  onClick={() => {
+                    setActiveTab("architecture");
+                    logFirebaseEvent("select_console_tab", { project: activeProject.title, tab: "architecture" });
+                  }}
                   className={`console-tab-btn ${activeTab === "architecture" ? "active" : ""}`}
                 >
                   <Cpu size={14} />
                   <span>Code Architecture</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab("impact")}
+                  onClick={() => {
+                    setActiveTab("impact");
+                    logFirebaseEvent("select_console_tab", { project: activeProject.title, tab: "impact" });
+                  }}
                   className={`console-tab-btn ${activeTab === "impact" ? "active" : ""}`}
                 >
                   <Activity size={14} />

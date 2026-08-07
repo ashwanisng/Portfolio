@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { submitContactForm } from "../actions/contact";
 import { CheckCircle2, ArrowLeft, Mail, FileText } from "lucide-react";
+import { logFirebaseEvent } from "../../lib/firebase";
 
 export default function ClientContactPage() {
   const [formData, setFormData] = useState({
@@ -46,6 +47,11 @@ export default function ClientContactPage() {
 
     setLoading(false);
     if (result.success) {
+      logFirebaseEvent("contact_form_submit", {
+        stage: formData.stage,
+        budget: formData.budget,
+        timeline: formData.timeline
+      });
       setSubmitted(true);
     } else {
       alert("Something went wrong. Please try again.");

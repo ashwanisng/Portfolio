@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import QuickChat from "../components/QuickChat";
 import ScrollObserver from "../components/ScrollObserver";
+import FirebaseAnalyticsProvider from "../components/FirebaseAnalyticsProvider";
 
 const BASE_URL = "https://ashwanisng.com";
 
@@ -142,6 +144,9 @@ export default function RootLayout({
         />
       </head>
       <body className="theme-dark-body">
+        <Suspense fallback={null}>
+          <FirebaseAnalyticsProvider />
+        </Suspense>
         <ScrollObserver />
         <Header />
         <main className="main-content-layout">{children}</main>
