@@ -4,7 +4,6 @@ import "./globals.css";
 import { Suspense } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import QuickChat from "../components/QuickChat";
 import ScrollObserver from "../components/ScrollObserver";
 import FirebaseAnalyticsProvider from "../components/FirebaseAnalyticsProvider";
 
@@ -135,6 +134,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${outfit.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
       <head>
@@ -151,7 +151,6 @@ export default function RootLayout({
         <Header />
         <main className="main-content-layout">{children}</main>
         <Footer />
-        <QuickChat />
       </body>
     </html>
   );

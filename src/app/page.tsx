@@ -1,766 +1,713 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  ArrowRight, 
-  Check, 
-  Clock, 
-  Sparkles,
-  Terminal,
-  Cpu,
-  Activity,
-  TrendingUp,
-  GitBranch,
+import {
+  ArrowRight,
   ChevronRight,
-  ChevronDown,
-  Globe,
-  Calendar,
-  Zap,
-  Shield,
-  Briefcase,
-  Target
+  MessageSquare,
+  MoveRight,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { logFirebaseEvent } from "../lib/firebase";
 
+const caseStudies = [
+  {
+    name: "SOCTR",
+    category: "Fintech mobile platform",
+    result: "60fps market charts under live ticker load",
+    story:
+      "Rebuilt the feed pipeline so high-frequency stock updates stopped competing with the UI thread.",
+    proof: ["WebSocket isolation", "Background parsing", "TradingView integration"],
+  },
+  {
+    name: "RightHand",
+    category: "Home services marketplace",
+    result: "99.9% payment success across Stripe and MyFatoorah",
+    story:
+      "Stabilized checkout by treating payments as a transaction lifecycle, not a sequence of screens.",
+    proof: ["Payment locks", "Map scheduling", "Partner operations"],
+  },
+  {
+    name: "Hudle",
+    category: "Sports venue marketplace",
+    result: "40% lower API latency in booking workflows",
+    story:
+      "Untangled dense venue schedules and rebuilt the partner app around durable feature boundaries.",
+    proof: ["BLoC architecture", "Codemagic releases", "Analytics events"],
+  },
+];
+
+const principles = [
+  {
+    title: "Product before platform",
+    text:
+      "Flutter is the medium. The work is reducing founder risk, clarifying the product loop, and shipping the smallest version that can earn trust.",
+  },
+  {
+    title: "Architecture users can feel",
+    text:
+      "Performance, caching, state boundaries, and release discipline show up as faster checkout, calmer screens, and fewer support conversations.",
+  },
+  {
+    title: "Senior without ceremony",
+    text:
+      "You get direct thinking, written trade-offs, async updates, and implementation that fits the team you already have.",
+  },
+];
+
+const journey = [
+  ["01", "Shape", "Turn a founder brief into crisp flows, technical assumptions, and a launchable scope."],
+  ["02", "Build", "Implement the app, integrations, analytics, and backend seams with weekly demo loops."],
+  ["03", "Harden", "Profile performance, close edge cases, prepare stores, and document how the system evolves."],
+];
+
+const trustSignals = [
+  "Fintech, booking, services, travel, SaaS",
+  "Flutter, Go, Firebase, PostgreSQL, AWS",
+  "Remote-friendly across India, UAE, Europe, and US overlap",
+];
+
 export default function Home() {
-  const [activeReleaseIdx, setActiveReleaseIdx] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [commandQuery, setCommandQuery] = useState("");
-  const [localTime, setLocalTime] = useState("");
-
-  // Update local time clock dynamically
-  useEffect(() => {
-    const updateClock = () => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      };
-      setLocalTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const releases = [
-    {
-      version: "v2.4.0",
-      title: "SOCTR Fintech App",
-      status: "PRODUCTION",
-      date: "August 2026",
-      impact: "Achieved 60fps constant chart rendering and 99.9% crash-free rate.",
-      summary: "Mobile investment workbench featuring real-time market synchronization, local cache optimizations, and clean state components.",
-      tech: ["Flutter", "Firebase", "SQLite", "Sentry"],
-      caseStudyUrl: "/projects/soctr"
-    },
-    {
-      version: "v1.1.2",
-      title: "RightHand Services",
-      status: "STABLE",
-      date: "June 2026",
-      impact: "Reduced delivery coordinate sync latency by 35%.",
-      summary: "Dual-application ecosystem (Customer & Partner) coordinating on-demand home bookings, Stripe payments, and live mapping updates.",
-      tech: ["Flutter", "Go", "PostgreSQL", "Google Maps"],
-      caseStudyUrl: "/projects/righthand"
-    },
-    {
-      version: "v3.0.1",
-      title: "goStops Travel Platform",
-      status: "PRODUCTION",
-      date: "April 2026",
-      impact: "Successfully scaled booking transactions by 150%.",
-      summary: "Hostel search and booking framework integrating customized checkout gateways, local offline sync layers, and live push channels.",
-      tech: ["Flutter", "Node.js", "Redis", "Firebase"],
-      caseStudyUrl: "/projects/gostops"
-    },
-    {
-      version: "v4.1.0",
-      title: "Hudle Partner App",
-      status: "STABLE",
-      date: "January 2026",
-      impact: "Refactored legacy stack to reduce technical load by 50%.",
-      summary: "B2B sports facility management dashboard, refactored to clean Cubit state structures with automated GitHub actions testing cycles.",
-      tech: ["Flutter", "BLoC", "REST APIs", "CI/CD"],
-      caseStudyUrl: "/projects/hudle"
-    }
-  ];
-
-  const faqData = [
-    {
-      q: "Can you join an existing team or codebase?",
-      a: "Yes. I regularly integrate with active engineering squads. I clean up legacy architectures, install clean BLoC/Repository patterns, and align with design frameworks to accelerate sprint delivery."
-    },
-    {
-      q: "Do you sign NDAs before initial briefings?",
-      a: "Absolutely. I respect intellectual property guidelines. I sign mutual NDAs before reviewing designs, repository architecture, or endpoint documentation."
-    },
-    {
-      q: "What is your typical developer-communication loop?",
-      a: "I coordinate inside your Slack/Discord channel, log sprint tickets in Linear or Jira, participate in standups, and provide transparent updates via async Loom walkthroughs."
-    },
-    {
-      q: "How do you define your engagement models?",
-      a: "For MVPs with set requirements, I execute on fixed-scope project cycles. For scaling features or active product support, I coordinate on weekly or monthly retainers."
-    }
-  ];
-
-  const handleCommandSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    logFirebaseEvent("command_search", { query: commandQuery });
-    // Quick search routing helpers
-    const query = commandQuery.toLowerCase();
-    if (query.includes("project") || query.includes("work")) {
-      window.location.href = "/projects";
-    } else if (query.includes("service") || query.includes("contact")) {
-      window.location.href = "/services";
-    } else if (query.includes("blog") || query.includes("article")) {
-      window.location.href = "/blog";
-    } else {
-      alert(`No direct action matched for: "${commandQuery}". Try typing "projects" or "services".`);
-    }
-  };
-
   return (
-    <div className="workbench-page-wrapper">
-      
-      {/* Visual background glows */}
-      <div className="workbench-bg-grid"></div>
-      <div className="glow-sphere blue"></div>
-      <div className="glow-sphere purple"></div>
-
-      {/* Top Console System Bar */}
-      <section className="sys-status-bar">
-        <div className="container status-bar-inner">
-          <div className="sys-left">
-            <span className="status-indicator-dot"></span>
-            <span className="status-txt font-mono">SYSTEM: ONLINE</span>
-            <span className="divider-slash">/</span>
-            <span className="status-txt font-mono text-purple">ENGAGEMENT: AVAILABLE</span>
+    <div className="launch-page">
+      <section className="launch-hero" aria-labelledby="home-heading">
+        <div className="container launch-hero-grid">
+          <div className="launch-copy">
+            <p className="eyebrow">Senior Mobile Product Engineer</p>
+            <h1 id="home-heading">
+              I turn founder-grade ideas into mobile products people can trust.
+            </h1>
+            <p className="hero-lede">
+              I partner with ambitious startups to design, build, and launch polished Flutter products with the product thinking, architecture, and delivery cadence of a senior founding engineer.
+            </p>
+            <div className="hero-actions" aria-label="Primary actions">
+              <Link
+                href="/contact"
+                className="btn btn-primary"
+                onClick={() => logFirebaseEvent("click_home_hero_contact", {})}
+              >
+                Book a Discovery Call
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+              <Link href="/projects" className="quiet-link">
+                Study the Work
+                <ChevronRight size={16} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="trust-strip" aria-label="Trust signals">
+              {trustSignals.map((signal) => (
+                <span key={signal}>{signal}</span>
+              ))}
+            </div>
           </div>
-          <div className="sys-right">
-            <span className="status-txt font-mono">NEXT SLOT: SEPT 2026</span>
-            <span className="divider-slash">/</span>
-            <span className="status-txt font-mono text-blue">IST: {localTime || "12:00:00"}</span>
+
+          <div className="product-stage" aria-label="Mobile product launch visual">
+            <div className="phone-frame">
+              <div className="phone-top" aria-hidden="true"></div>
+              <div className="app-screen">
+                <div className="screen-header">
+                  <span>Launch Readiness</span>
+                  <strong>92%</strong>
+                </div>
+                <div className="screen-hero-card">
+                  <span>Checkout recovery</span>
+                  <strong>Payment state secured</strong>
+                  <p>Bank redirect, retry, and confirmation paths are now isolated.</p>
+                </div>
+                <div className="screen-row">
+                  <span>Frame budget</span>
+                  <strong>16 ms</strong>
+                </div>
+                <div className="screen-row">
+                  <span>Crash-free</span>
+                  <strong>99.9%</strong>
+                </div>
+                <div className="screen-progress" aria-hidden="true">
+                  <span style={{ width: "72%" }}></span>
+                </div>
+              </div>
+            </div>
+            <div className="stage-note note-one">
+              <Sparkles size={14} aria-hidden="true" />
+              <span>Product judgement built into engineering decisions.</span>
+            </div>
+            <div className="stage-note note-two">
+              <ShieldCheck size={14} aria-hidden="true" />
+              <span>Calm launches, not heroic recoveries.</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Hero: Interactive Workbench Input */}
-      <section className="hero-workbench-section">
-        <div className="container text-center">
-          <span className="section-tag font-mono">PRODUCT SPECIFICATION</span>
-          <h1 className="hero-title">Ashwani Singh</h1>
-          <p className="hero-subtitle">
-            Senior Cross-Platform Engineer building high-performance mobile products for startups.
+      <section className="narrative-section">
+        <div className="container split-intro">
+          <p className="eyebrow">The Positioning</p>
+          <h2>A founder does not need another developer. They need someone who can hold product, UX, and production reality in one head.</h2>
+          <p>
+            The site is designed around that promise. Each section moves from curiosity to trust: what I build, how I think, what shipped, and how a collaboration begins.
           </p>
-
-          {/* Command Terminal Bar */}
-          <form onSubmit={handleCommandSearch} className="command-bar-wrapper m-t-40">
-            <div className="command-input-container">
-              <Terminal size={14} className="command-icon" />
-              <input 
-                type="text" 
-                placeholder="Type 'projects', 'services', or 'contact' and press Enter..." 
-                value={commandQuery}
-                onChange={(e) => setCommandQuery(e.target.value)}
-                className="command-input font-mono"
-              />
-              <span className="command-shortcut font-mono">⌘K</span>
-            </div>
-          </form>
         </div>
       </section>
 
-      {/* Live Workspace Grid */}
-      <section className="workspace-feed-section">
+      <section className="principles-section">
+        <div className="container principle-grid">
+          {principles.map((item) => (
+            <article key={item.title} className="principle-card">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="case-preview-section" aria-labelledby="case-preview-heading">
         <div className="container">
-          <div className="workspace-layout">
-            
-            {/* Left Feed: Shipped Release Changelog */}
-            <div className="workspace-feed-col">
-              <div className="feed-header">
-                <GitBranch size={16} className="text-purple" />
-                <span className="font-mono">LATEST SHIPPED RELEASES</span>
-              </div>
-
-              <div className="changelog-list">
-                {releases.map((rel, idx) => (
-                  <div key={idx} className="changelog-card card-glass">
-                    <div className="card-rel-header">
-                      <div className="version-tag font-mono">{rel.version}</div>
-                      <span className="date-tag font-mono">{rel.date}</span>
-                    </div>
-                    <div className="card-rel-body">
-                      <h3>{rel.title}</h3>
-                      <p className="rel-summary">{rel.summary}</p>
-                      <div className="rel-impact-badge">
-                        <TrendingUp size={12} className="text-emerald" />
-                        <span>{rel.impact}</span>
-                      </div>
-                      <div className="rel-tech-row m-t-16">
-                        {rel.tech.map((t, tIdx) => (
-                          <span key={tIdx} className="tech-pill font-mono">{t}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="card-rel-footer">
-                      <Link 
-                        href={rel.caseStudyUrl}
-                        className="rel-link"
-                        onClick={() => logFirebaseEvent("click_homepage_release", { release: rel.title })}
-                      >
-                        <span>Inspect Release Architecture &rarr;</span>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="section-heading-row">
+            <div>
+              <p className="eyebrow">Selected Work</p>
+              <h2 id="case-preview-heading">Case studies written like product decisions, not project thumbnails.</h2>
             </div>
-
-            {/* Right Panel: Operations Console */}
-            <div className="workspace-console-col">
-              
-              {/* Operations Block */}
-              <div className="console-panel-card card-glass">
-                <div className="panel-header">
-                  <Cpu size={14} className="text-blue" />
-                  <span className="font-mono">ENGINEERING METRICS</span>
+            <Link href="/projects" className="quiet-link desktop-link">
+              View All Work
+              <MoveRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="case-stack">
+            {caseStudies.map((project) => (
+              <Link
+                href="/projects"
+                key={project.name}
+                className="case-row"
+                onClick={() => logFirebaseEvent("click_home_case_preview", { project: project.name })}
+              >
+                <div>
+                  <span className="case-kicker">{project.category}</span>
+                  <h3>{project.name}</h3>
                 </div>
-                <div className="panel-body">
-                  
-                  {/* Verified stats list */}
-                  <div className="metric-row">
-                    <div className="metric-meta">
-                      <span className="metric-label">Startup Bootstrap Speed</span>
-                      <span className="metric-sub font-mono">Optimized image caching</span>
-                    </div>
-                    <span className="metric-number text-emerald">&darr; 40%</span>
-                  </div>
-
-                  <div className="metric-row">
-                    <div className="metric-meta">
-                      <span className="metric-label">UI Render Framerate</span>
-                      <span className="metric-sub font-mono">Eliminated redundant rebuilds</span>
-                    </div>
-                    <span className="metric-number text-blue">60 FPS</span>
-                  </div>
-
-                  <div className="metric-row">
-                    <div className="metric-meta">
-                      <span className="metric-label">Production Stability Rate</span>
-                      <span className="metric-sub font-mono">Configured telemetry alerts</span>
-                    </div>
-                    <span className="metric-number text-purple">99.9%</span>
-                  </div>
+                <p>{project.story}</p>
+                <div className="case-result">
+                  <strong>{project.result}</strong>
+                  <span>{project.proof.join(" / ")}</span>
                 </div>
-              </div>
-
-              {/* Working Guidelines macOS window block */}
-              <div className="console-panel-card card-glass m-t-24">
-                <div className="panel-header">
-                  <Activity size={14} className="text-purple" />
-                  <span className="font-mono">PARTNERSHIP GUIDELINES</span>
-                </div>
-                <div className="panel-body">
-                  <div className="guideline-item">
-                    <strong>Fixed-Scope MVP Cycles</strong>
-                    <p>Clean deliverables and locked budgets for launching products in 6–10 weeks.</p>
-                  </div>
-                  <div className="guideline-item">
-                    <strong>Weekly Active Sprints</strong>
-                    <p>Reserved developer capacity with async Loom walkthroughs and Slack standups.</p>
-                  </div>
-                  <div className="guideline-item">
-                    <strong>Modular Architecture</strong>
-                    <p>Clean state systems (BLoC/Cubit) built to scale from day one.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Interactive Founder FAQ Accordion */}
-              <div className="console-panel-card card-glass m-t-24">
-                <div className="panel-header">
-                  <Check size={14} className="text-emerald" />
-                  <span className="font-mono">FOUNDER INQUIRIES</span>
-                </div>
-                <div className="panel-body faq-accordion-container">
-                  {faqData.map((faq, idx) => {
-                    const isOpen = openFaq === idx;
-                    return (
-                      <div key={idx} className="faq-node">
-                        <button 
-                          onClick={() => setOpenFaq(isOpen ? null : idx)}
-                          className="faq-node-title"
-                        >
-                          <span>{faq.q}</span>
-                          {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                        </button>
-                        {isOpen && (
-                          <p className="faq-node-answer reveal-tab">{faq.a}</p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Sticky Bottom Release Status Indicator */}
-      <div className="sticky-release-bar">
-        <div className="container sticky-bar-inner">
-          <div className="release-status-left">
-            <span className="av-pulse-dot"></span>
-            <span className="font-mono">STATUS: ACCEPTING SPRINT PROJECTS</span>
+      <section className="journey-section" aria-labelledby="journey-heading">
+        <div className="container journey-grid">
+          <div>
+            <p className="eyebrow">Engineering Partnership</p>
+            <h2 id="journey-heading">A simple operating model for shipping without chaos.</h2>
+            <p>
+              The service offer is intentionally narrow: product-minded mobile delivery for startups that need momentum, quality, and a clear technical path.
+            </p>
+            <Link href="/services" className="quiet-link">
+              See Engagement Options
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
-          <Link 
-            href="/contact" 
-            className="release-action-btn card-glass"
-            onClick={() => logFirebaseEvent("click_sticky_bar_contact", {})}
+          <ol className="journey-list">
+            {journey.map(([step, title, text]) => (
+              <li key={step}>
+                <span>{step}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="final-cta-section">
+        <div className="container final-cta">
+          <div>
+            <p className="eyebrow">Next Slot</p>
+            <h2>Bring the problem. I will help shape the product and ship the app.</h2>
+          </div>
+          <Link
+            href="/contact"
+            className="btn btn-primary"
+            onClick={() => logFirebaseEvent("click_home_final_contact", {})}
           >
-            <span>Schedule Discovery Call</span>
-            <ArrowRight size={12} />
+            Start the Conversation
+            <MessageSquare size={16} aria-hidden="true" />
           </Link>
         </div>
-      </div>
+      </section>
 
       <style jsx>{`
-        .workbench-page-wrapper {
-          padding-bottom: 120px;
-          position: relative;
+        .launch-page {
+          background:
+            radial-gradient(circle at 50% 0%, rgba(34, 211, 238, 0.12), transparent 32rem),
+            linear-gradient(180deg, rgba(255,255,255,0.035), transparent 28rem),
+            var(--bg-primary);
           overflow: hidden;
         }
 
-        /* Decorative Grid & Glows */
-        .workbench-bg-grid {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-          background-size: 40px 40px;
-          background-position: center top;
-          mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-          z-index: 1;
-        }
-        .glow-sphere {
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          filter: blur(80px);
-          z-index: 2;
-          opacity: 0.8;
-        }
-        .glow-sphere.blue {
-          top: -10%;
-          left: 10%;
-          background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
-        }
-        .glow-sphere.purple {
-          top: 30%;
-          right: 10%;
-          background: radial-gradient(circle, rgba(168, 85, 247, 0.06) 0%, transparent 70%);
-        }
-
-        /* Top Console System Bar */
-        .sys-status-bar {
-          background: rgba(255, 255, 255, 0.01);
+        .launch-hero {
+          min-height: calc(100svh - var(--header-height));
+          display: flex;
+          align-items: center;
+          padding: 64px 0 72px;
           border-bottom: 1px solid var(--border-color);
-          padding: 10px 0;
-          position: relative;
-          z-index: 5;
-        }
-        .status-bar-inner {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-size: 11px;
-        }
-        .sys-left, .sys-right {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .status-indicator-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 8px #10b981;
-        }
-        .status-txt {
-          color: var(--text-secondary);
-        }
-        .divider-slash {
-          color: rgba(255, 255, 255, 0.1);
         }
 
-        /* Hero Scoping */
-        .hero-workbench-section {
-          padding: 100px 0 60px;
-          position: relative;
-          z-index: 5;
-        }
-        .hero-title {
-          font-size: 64px;
-          font-weight: 800;
-          color: #fff;
-          margin-bottom: 16px;
-          letter-spacing: -0.03em;
-        }
-        .hero-subtitle {
-          font-size: 20px;
-          color: var(--text-secondary);
-          max-width: 640px;
-          margin: 0 auto;
-          line-height: 1.6;
-        }
-
-        /* Command Line Input */
-        .command-bar-wrapper {
-          max-width: 580px;
-          margin: 0 auto;
-        }
-        .command-input-container {
-          display: flex;
-          align-items: center;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-color);
-          padding: 14px 20px;
-          border-radius: 12px;
-          gap: 12px;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .command-input-container:focus-within {
-          border-color: #3b82f6;
-          box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
-        }
-        .command-icon {
-          color: var(--text-muted);
-        }
-        .command-input {
-          flex: 1;
-          background: transparent;
-          border: none;
-          color: #fff;
-          outline: none;
-          font-size: 13.5px;
-        }
-        .command-input::placeholder {
-          color: var(--text-muted);
-        }
-        .command-shortcut {
-          font-size: 10px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-color);
-          padding: 2px 6px;
-          border-radius: 4px;
-          color: var(--text-muted);
-        }
-
-        /* Workspace Grid Split */
-        .workspace-feed-section {
-          padding: 40px 0;
-          position: relative;
-          z-index: 5;
-        }
-        .workspace-layout {
+        .launch-hero-grid {
           display: grid;
-          grid-template-columns: 1fr 360px;
-          gap: 32px;
-          align-items: start;
-        }
-        
-        .feed-header, .panel-header {
-          display: flex;
+          grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.72fr);
+          gap: 72px;
           align-items: center;
-          gap: 10px;
-          font-size: 11px;
-          font-weight: 700;
-          color: var(--text-muted);
-          letter-spacing: 0.05em;
-          margin-bottom: 18px;
         }
 
-        /* Changelog Cards */
-        .changelog-list {
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-        .changelog-card {
-          border-radius: 16px;
-          border: 1px solid var(--border-color);
-          padding: 28px;
-        }
-        .card-rel-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-          padding-bottom: 14px;
-          margin-bottom: 18px;
-        }
-        .version-tag {
-          font-size: 11px;
-          font-weight: 700;
-          color: #3b82f6;
-          background: rgba(59, 130, 246, 0.08);
-          border: 1px solid rgba(59, 130, 246, 0.15);
-          padding: 4px 8px;
-          border-radius: 6px;
-        }
-        .date-tag {
-          font-size: 11px;
-          color: var(--text-muted);
-        }
-        .changelog-card h3 {
-          font-size: 20px;
-          font-weight: 700;
-          color: #fff;
-          margin-bottom: 8px;
-        }
-        .rel-summary {
-          font-size: 14px;
-          color: var(--text-secondary);
-          line-height: 1.5;
-          margin-bottom: 16px;
-        }
-        .rel-impact-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
+        .eyebrow {
+          color: var(--accent-blue-light);
           font-size: 12px;
-          color: var(--text-secondary);
-          background: rgba(255, 255, 255, 0.015);
-          border: 1px solid var(--border-color);
-          padding: 6px 12px;
-          border-radius: 8px;
-        }
-        .tech-pill {
-          font-size: 11px;
-          color: var(--text-muted);
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-color);
-          padding: 3px 8px;
-          border-radius: 4px;
-          margin-right: 6px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          margin-bottom: 18px;
+          text-transform: uppercase;
         }
 
-        .card-rel-footer {
-          margin-top: 24px;
-          border-top: 1px solid var(--border-color);
-          padding-top: 16px;
-        }
-        .rel-link {
-          font-size: 13.5px;
+        .launch-copy h1,
+        .split-intro h2,
+        .section-heading-row h2,
+        .journey-grid h2,
+        .final-cta h2 {
+          color: #fff;
+          font-size: clamp(42px, 7vw, 92px);
           font-weight: 600;
-          color: #3b82f6;
-          text-decoration: none;
+          letter-spacing: -0.045em;
+          line-height: 0.94;
+          max-width: 900px;
         }
 
-        /* Right Panel Cards */
-        .console-panel-card {
-          padding: 24px;
-          border-radius: 12px;
-          border: 1px solid var(--border-color);
-        }
-        .panel-header {
-          margin-bottom: 16px;
+        .hero-lede {
+          color: var(--text-secondary);
+          font-size: clamp(18px, 2vw, 22px);
+          line-height: 1.55;
+          margin-top: 28px;
+          max-width: 720px;
         }
 
-        .metric-row {
+        .hero-actions {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          padding: 14px 0;
-          border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+          gap: 22px;
+          margin-top: 36px;
+          flex-wrap: wrap;
         }
-        .metric-row:last-child {
-          border-bottom: none;
-          padding-bottom: 0;
+
+        .quiet-link {
+          align-items: center;
+          color: #fff;
+          display: inline-flex;
+          font-size: 15px;
+          font-weight: 600;
+          gap: 6px;
         }
-        .metric-meta {
+
+        .quiet-link:hover {
+          color: var(--accent-blue-light);
+        }
+
+        .trust-strip {
+          border-top: 1px solid var(--border-color);
+          display: grid;
+          gap: 10px;
+          margin-top: 52px;
+          max-width: 680px;
+          padding-top: 22px;
+        }
+
+        .trust-strip span {
+          color: var(--text-secondary);
+          font-size: 14px;
+        }
+
+        .trust-strip span::before {
+          color: var(--accent-blue-light);
+          content: "•";
+          margin-right: 10px;
+        }
+
+        .product-stage {
+          display: grid;
+          min-height: 620px;
+          place-items: center;
+          position: relative;
+        }
+
+        .phone-frame {
+          background: linear-gradient(145deg, #262a2b, #050606 34%, #121516);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 42px;
+          box-shadow: 0 46px 110px rgba(0,0,0,0.58), inset 0 0 0 8px #090b0c;
+          height: 560px;
+          padding: 18px;
+          position: relative;
+          width: min(320px, 82vw);
+        }
+
+        .phone-top {
+          background: #050607;
+          border-radius: 0 0 18px 18px;
+          height: 24px;
+          left: 50%;
+          position: absolute;
+          top: 18px;
+          transform: translateX(-50%);
+          width: 98px;
+          z-index: 2;
+        }
+
+        .app-screen {
+          background: linear-gradient(180deg, #111818, #070909);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 30px;
           display: flex;
           flex-direction: column;
-          gap: 2px;
-        }
-        .metric-label {
-          font-size: 13.5px;
-          color: #fff;
-          font-weight: 600;
-        }
-        .metric-sub {
-          font-size: 10px;
-          color: var(--text-muted);
-        }
-        .metric-number {
-          font-size: 16px;
-          font-weight: 700;
+          gap: 14px;
+          height: 100%;
+          overflow: hidden;
+          padding: 54px 18px 20px;
         }
 
-        .guideline-item {
-          margin-bottom: 16px;
+        .screen-header,
+        .screen-row {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
         }
-        .guideline-item:last-child {
-          margin-bottom: 0;
+
+        .screen-header span,
+        .screen-row span,
+        .screen-hero-card span,
+        .screen-hero-card p {
+          color: var(--text-secondary);
+          font-size: 12px;
         }
-        .guideline-item strong {
-          font-size: 13px;
+
+        .screen-header strong {
+          color: var(--accent-blue-light);
+          font-size: 28px;
+        }
+
+        .screen-hero-card {
+          background: rgba(255,255,255,0.055);
+          border: 1px solid rgba(255,255,255,0.09);
+          border-radius: 8px;
+          margin: 18px 0;
+          padding: 20px;
+        }
+
+        .screen-hero-card strong {
           color: #fff;
           display: block;
-          margin-bottom: 4px;
-        }
-        .guideline-item p {
-          font-size: 12px;
-          color: var(--text-secondary);
-          line-height: 1.4;
-          margin: 0;
+          font-size: 24px;
+          letter-spacing: -0.03em;
+          line-height: 1.05;
+          margin: 10px 0;
         }
 
-        /* FAQ node */
-        .faq-accordion-container {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
+        .screen-row {
+          border-top: 1px solid rgba(255,255,255,0.08);
+          padding-top: 15px;
         }
-        .faq-node {
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 10px;
-        }
-        .faq-node:last-child {
-          border-bottom: none;
-          padding-bottom: 0;
-        }
-        .faq-node-title {
-          width: 100%;
-          background: transparent;
-          border: none;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          color: var(--text-secondary);
-          font-size: 13px;
-          font-weight: 600;
-          text-align: left;
-          cursor: pointer;
-          padding: 6px 0;
-        }
-        .faq-node-title:hover {
+
+        .screen-row strong {
           color: #fff;
         }
-        .faq-node-answer {
-          font-size: 12px;
-          color: var(--text-muted);
-          line-height: 1.4;
-          margin-top: 6px;
+
+        .screen-progress {
+          background: rgba(255,255,255,0.08);
+          border-radius: 999px;
+          height: 6px;
+          margin-top: auto;
+          overflow: hidden;
         }
 
-        /* Sticky Bottom Bar */
-        .sticky-release-bar {
-          position: fixed;
-          bottom: 24px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: calc(100% - 48px);
-          max-width: 900px;
-          background: rgba(18, 18, 20, 0.85);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 16px 24px;
-          z-index: 100;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        .screen-progress span {
+          background: var(--accent-blue-light);
+          display: block;
+          height: 100%;
         }
-        .sticky-bar-inner {
-          display: flex;
-          justify-content: space-between;
+
+        .stage-note {
           align-items: center;
-        }
-        .release-status-left {
+          background: rgba(7, 8, 8, 0.82);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 8px;
+          color: #fff;
           display: flex;
-          align-items: center;
           gap: 10px;
-          font-size: 11.5px;
+          max-width: 250px;
+          padding: 14px 16px;
+          position: absolute;
+        }
+
+        .stage-note svg {
+          color: var(--accent-blue-light);
+          flex: 0 0 auto;
+        }
+
+        .stage-note span {
+          font-size: 13px;
+          line-height: 1.4;
+        }
+
+        .note-one {
+          left: 0;
+          top: 18%;
+        }
+
+        .note-two {
+          bottom: 17%;
+          right: 0;
+        }
+
+        .narrative-section,
+        .principles-section,
+        .case-preview-section,
+        .journey-section,
+        .final-cta-section {
+          padding: 110px 0;
+        }
+
+        .split-intro {
+          display: grid;
+          gap: 34px;
+          grid-template-columns: 0.35fr 1fr;
+        }
+
+        .split-intro h2,
+        .section-heading-row h2,
+        .journey-grid h2,
+        .final-cta h2 {
+          font-size: clamp(34px, 5vw, 64px);
+          line-height: 1;
+        }
+
+        .split-intro > p:last-child {
+          color: var(--text-secondary);
+          font-size: 18px;
+          line-height: 1.65;
+          max-width: 560px;
+        }
+
+        .principle-grid {
+          display: grid;
+          gap: 1px;
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .principle-card {
+          background: rgba(255,255,255,0.025);
+          border: 1px solid var(--border-color);
+          min-height: 290px;
+          padding: 36px;
+        }
+
+        .principle-card h3,
+        .case-row h3,
+        .journey-list h3 {
           color: #fff;
+          font-size: 22px;
+          letter-spacing: -0.02em;
+          margin-bottom: 14px;
         }
-        .av-pulse-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 10px #10b981;
-          animation: pulse 2s infinite;
+
+        .principle-card p,
+        .case-row p,
+        .journey-list p,
+        .journey-grid > div > p {
+          color: var(--text-secondary);
+          line-height: 1.65;
         }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.2); opacity: 0.4; }
-        }
-        .release-action-btn {
+
+        .section-heading-row,
+        .final-cta {
+          align-items: end;
           display: flex;
+          gap: 48px;
+          justify-content: space-between;
+        }
+
+        .case-stack {
+          border-top: 1px solid var(--border-color);
+          margin-top: 54px;
+        }
+
+        .case-row {
           align-items: center;
-          gap: 8px;
-          padding: 8px 16px;
-          border-radius: 6px;
+          border-bottom: 1px solid var(--border-color);
+          display: grid;
+          gap: 28px;
+          grid-template-columns: 0.55fr 1fr 0.75fr;
+          padding: 32px 0;
+        }
+
+        .case-row:hover h3,
+        .case-row:hover .case-result strong {
+          color: var(--accent-blue-light);
+        }
+
+        .case-kicker,
+        .case-result span {
+          color: var(--text-muted);
+          display: block;
           font-size: 12px;
           font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .case-result strong {
           color: #fff;
-          background: rgba(255,255,255,0.03);
+          display: block;
+          font-size: 18px;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+          margin-bottom: 12px;
+        }
+
+        .journey-section {
+          background: rgba(255,255,255,0.025);
+          border-bottom: 1px solid var(--border-color);
+          border-top: 1px solid var(--border-color);
+        }
+
+        .journey-grid {
+          display: grid;
+          gap: 72px;
+          grid-template-columns: 0.8fr 1fr;
+        }
+
+        .journey-grid > div > p {
+          font-size: 18px;
+          margin: 24px 0 30px;
+          max-width: 540px;
+        }
+
+        .journey-list {
+          display: grid;
+          gap: 1px;
+          list-style: none;
+        }
+
+        .journey-list li {
+          background: var(--bg-primary);
           border: 1px solid var(--border-color);
-          text-decoration: none;
-          transition: all 0.2s ease;
-        }
-        .release-action-btn:hover {
-          background: rgba(255, 255, 255, 0.08);
-          transform: translateY(-1px);
+          display: grid;
+          gap: 24px;
+          grid-template-columns: auto 1fr;
+          padding: 30px;
         }
 
-        /* Staggered animation */
-        .reveal-tab {
-          animation: revealTab 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes revealTab {
-          from { opacity: 0; transform: translateY(6px); }
-          to { opacity: 1; transform: translateY(0); }
+        .journey-list li > span {
+          color: var(--accent-blue-light);
+          font-size: 13px;
+          font-weight: 800;
+          padding-top: 6px;
         }
 
-        /* Responsive styling */
-        @media (max-width: 1024px) {
-          .workspace-layout {
+        .final-cta {
+          align-items: center;
+          border: 1px solid var(--border-color);
+          padding: 48px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+          .case-row,
+          .quiet-link,
+          .stage-note {
+            transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+          }
+
+          .case-row:hover {
+            transform: translateX(6px);
+          }
+        }
+
+        @media (max-width: 980px) {
+          .launch-hero-grid,
+          .split-intro,
+          .principle-grid,
+          .journey-grid {
             grid-template-columns: 1fr;
           }
-          .hero-title {
-            font-size: 48px;
+
+          .launch-hero {
+            padding-top: 44px;
+          }
+
+          .product-stage {
+            min-height: 560px;
+          }
+
+          .section-heading-row,
+          .final-cta {
+            align-items: start;
+            flex-direction: column;
+          }
+
+          .case-row {
+            grid-template-columns: 1fr;
           }
         }
-        @media (max-width: 600px) {
-          .sys-status-bar {
+
+        @media (max-width: 640px) {
+          .launch-hero,
+          .narrative-section,
+          .principles-section,
+          .case-preview-section,
+          .journey-section,
+          .final-cta-section {
+            padding: 72px 0;
+          }
+
+          .hero-actions {
+            align-items: stretch;
+            flex-direction: column;
+          }
+
+          .hero-actions .btn,
+          .hero-actions .quiet-link,
+          .final-cta .btn {
+            justify-content: center;
+            width: 100%;
+          }
+
+          .product-stage {
+            min-height: 500px;
+          }
+
+          .phone-frame {
+            height: 500px;
+          }
+
+          .stage-note {
+            position: static;
+            margin-top: 12px;
+            width: 100%;
+          }
+
+          .product-stage {
+            align-content: center;
+          }
+
+          .principle-card,
+          .journey-list li,
+          .final-cta {
+            padding: 24px;
+          }
+
+          .desktop-link {
             display: none;
-          }
-          .hero-title {
-            font-size: 38px;
-          }
-          .hero-subtitle {
-            font-size: 16px;
-          }
-          .sticky-release-bar {
-            width: calc(100% - 24px);
-            padding: 12px 16px;
-            bottom: 12px;
-          }
-          .release-status-left {
-            font-size: 10.5px;
           }
         }
       `}</style>

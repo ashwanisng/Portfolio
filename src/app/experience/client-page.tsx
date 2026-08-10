@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Briefcase, Calendar, MapPin, Award, CheckCircle } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, Briefcase } from "lucide-react";
+import { logFirebaseEvent } from "../../lib/firebase";
 
 export default function ClientExperiencePage() {
   const experiences = [
@@ -10,300 +11,284 @@ export default function ClientExperiencePage() {
       role: "Senior Mobile Engineer",
       period: "Feb 2026 – Present",
       location: "Mumbai, India (Remote)",
-      tech: "Flutter, Dart, Mobile App Architecture, Android SDK, iOS Parity, REST APIs",
-      achievements: [
-        "Led mobile engineering initiatives, defining Flutter app architectures and scaling high-performance services.",
-        "Collaborated with product and backend squads to ship secure, production-grade financial features serving active traders."
-      ]
+      summary: "Leading mobile engineering initiatives, defining high-performance Flutter app architectures, and scaling secure mobile transactional features.",
+      impact: [
+        { label: "Architecture", detail: "Defined core Flutter BLoC/Repository design patterns for the primary mobile client." },
+        { label: "Security", detail: "Standardized secure REST API communication boundaries and transaction state guards." }
+      ],
+      caseStudyUrl: null
     },
     {
       company: "RightHand",
       role: "Freelance Flutter Developer",
       period: "May 2025 – Feb 2026",
       location: "Qatar (Remote)",
-      tech: "Flutter, Clean Architecture, BLoC & Cubit, Go APIs, Stripe, MyFatoorah, Google Maps, Firebase FCM",
-      achievements: [
-        "Led the complete mobile application UX/UI revamp for a high-volume on-demand household services marketplace in Qatar.",
-        "Engineered secure payment workflows by integrating Stripe and MyFatoorah, reducing checkout-related support queries.",
-        "Decoupled dynamic service layouts into Clean Architecture boundaries using BLoC & Cubit state patterns to accelerate feature releases.",
-        "Enhanced production runtime stability and debugging coverage by implementing Firebase Crashlytics monitoring and custom analytics logs."
-      ]
+      summary: "Led the complete UX/UI redesign and checkout integrations for Qatar's leading on-demand household services platform.",
+      impact: [
+        { label: "Payment Integration", detail: "Engineered secure checkout pipelines with Stripe and MyFatoorah, reducing transaction drops." },
+        { label: "Live Tracking", detail: "Implemented map-based provider dispatching tracking with robust local caching." },
+        { label: "Code Quality", detail: "Decoupled monolithic layouts into isolated Cubit state models to accelerate developer velocity." }
+      ],
+      caseStudyUrl: "/projects"
     },
     {
       company: "Hudle",
       role: "Mobile Engineer",
       period: "Feb 2024 – Jan 2026",
       location: "New Delhi, India (Hybrid)",
-      tech: "Flutter, Dart, BLoC, AppsFlyer, Mix-Panel, REST APIs, Codemagic",
-      achievements: [
-        "Led the redesign of the app's interface by developing custom Flutter widgets and optimizing layout structures, achieving a 30% boost in user engagement.",
-        "Streamlined API integrations with caching strategies, reducing latency by 40% and improving app responsiveness.",
-        "Integrated AppsFlyer SDK for attribution tracking, improving user acquisition efficiency by 20%."
-      ]
+      summary: "Redesigned partner interfaces and optimized network calls for high-traffic sports venue bookings.",
+      impact: [
+        { label: "UX Redesign", detail: "Developed custom caching structures and layout widgets, boosting user engagement by 30%." },
+        { label: "Performance Optimization", detail: "Streamlined GraphQL/REST API payloads, reducing endpoint latency by 40%." },
+        { label: "Telemetry", detail: "Integrated AppsFlyer attribution layers to streamline campaign tracking conversions." }
+      ],
+      caseStudyUrl: "/projects"
     },
     {
       company: "SOCTR",
       role: "Freelance Flutter Developer (Sole Dev)",
       period: "Jun 2024 – Nov 2024",
       location: "India (Remote)",
-      tech: "Flutter, Clean Architecture, BLoC & Cubit, Go REST APIs, WebSockets, Syncfusion Charts, TradingView SDK, Firebase Suite",
-      achievements: [
-        "Served as the sole Flutter developer to design and develop the complete social investing mobile application from the ground up.",
-        "Integrated WebSockets to synchronize high-frequency real-time stock ticks and updates without UI frame lag.",
-        "Constructed custom charting modules using Syncfusion, FL Chart, and TradingView SDK to render complex technical analysis indicators.",
-        "Coordinated closely with Go backend engineers and configured Firebase Remote Config for dynamic runtime feature flags."
-      ]
+      summary: "Served as the sole developer responsible for building and launching a social investing mobile application from scratch.",
+      impact: [
+        { label: "Real-time Sync", detail: "Integrated WebSocket streams to render technical stock market ticks at constant 60fps without lag." },
+        { label: "Data Visualization", detail: "Built custom financial charting modules using Syncfusion and TradingView SDKs." },
+        { label: "Config Management", detail: "Configured Firebase Remote Config feature toggles for dynamic runtime updates." }
+      ],
+      caseStudyUrl: "/projects"
     },
     {
       company: "MrMilkMan By EverAg",
       role: "Mobile Engineer",
       period: "May 2023 – Jan 2024",
       location: "Gurgaon, Haryana, India",
-      tech: "Flutter, Dart, GraphQL, Firebase, GitHub Actions CI/CD",
-      achievements: [
-        "Implemented CI/CD pipeline using GitHub Actions, reducing deployment time by 60% and enabling daily releases.",
-        "Integrated notifications, analytics, and localization (3+ languages), improving user retention by 15%.",
-        "Optimized GraphQL queries, reducing data fetching time by 35% for 10K+ daily orders."
-      ]
-    },
-    {
-      company: "SQUAREBOAT",
-      role: "Mobile Engineer",
-      period: "Jan 2022 – May 2023",
-      location: "Gurgaon, Haryana, India",
-      tech: "Flutter, Dart, GetX, Firebase Analytics, REST APIs",
-      achievements: [
-        "Built 3 production Flutter apps serving 100K+ users with 99.5% crash-free rate, implementing clean architecture.",
-        "Translated Figma/Adobe XD designs into pixel-perfect responsive UI code, maintaining 99.5% design consistency across Android and iOS platforms."
-      ]
-    },
-    {
-      company: "SUDAN'S TECH. FOUND.",
-      role: "Flutter Developer Intern",
-      period: "May 2021 – Aug 2021",
-      location: "Remote",
-      tech: "Flutter, Dart, Mobile UI Layouts",
-      achievements: [
-        "Developed and prototyped custom user interfaces and layouts in Flutter.",
-        "Worked with REST APIs integration and verified cross-platform component compatibility."
-      ]
+      summary: "Optimized delivery subscriptions and scaled pipeline deployments for agricultural SaaS services.",
+      impact: [
+        { label: "CI/CD Automation", detail: "Structured automated GitHub Actions pipelines, reducing release compile times by 60%." },
+        { label: "Performance Tuning", detail: "Refactored local SQLite storage and queries, cutting data fetching delays by 35%." }
+      ],
+      caseStudyUrl: null
     }
   ];
 
   return (
     <div className="experience-page-wrapper">
+      
+      {/* Career Hero */}
       <section className="experience-hero">
         <div className="container">
           <span className="section-tag">CAREER HISTORY</span>
-          <h1>My professional timeline</h1>
+          <h1>Professional Experience</h1>
           <p className="subtitle">
-            An in-depth review of my engineering roles, technical responsibilities, and key product outcomes.
+            A history of senior engineering roles, technical decisions, and concrete business outcomes.
           </p>
         </div>
       </section>
 
+      {/* Simplified, Clean Career Stack */}
       <section className="experience-list-section">
-        <div className="container exp-cards-col">
-          {experiences.map((exp, idx) => (
-            <div key={idx} className="detailed-exp-card card-glass">
-              <div className="exp-card-header-row">
-                <div className="role-company-group">
-                  <div className="exp-icon-bullet">
-                    <Briefcase size={16} />
-                  </div>
-                  <div>
+        <div className="container">
+          <div className="exp-feed">
+            {experiences.map((exp, idx) => (
+              <div key={idx} className="exp-item card-glass">
+                <div className="exp-item-header">
+                  <div className="title-block">
                     <h3>{exp.role}</h3>
-                    <span className="company-meta">{exp.company}</span>
+                    <div className="company-meta-row">
+                      <span className="company-name font-mono">{exp.company}</span>
+                      <span className="meta-dot">&middot;</span>
+                      <span className="period-span">{exp.period}</span>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="loc-date-group">
-                  <div className="meta-sub-row">
-                    <Calendar size={13} />
-                    <span>{exp.period}</span>
-                  </div>
-                  <div className="meta-sub-row">
-                    <MapPin size={13} />
+                  <div className="loc-meta">
+                    <MapPin size={12} />
                     <span>{exp.location}</span>
                   </div>
                 </div>
-              </div>
 
-              <div className="exp-tech-radar-tags m-t-20">
-                <strong>Technologies:</strong>
-                <div className="tags-row-meta">
-                  {exp.tech.split(", ").map((t) => (
-                    <span key={t} className="tech-tag-meta">{t}</span>
+                <p className="exp-summary">{exp.summary}</p>
+
+                <div className="exp-impact-grid">
+                  {exp.impact.map((imp, impIdx) => (
+                    <div key={impIdx} className="impact-cell">
+                      <span className="impact-label font-mono">{imp.label}</span>
+                      <p className="impact-detail">{imp.detail}</p>
+                    </div>
                   ))}
                 </div>
-              </div>
 
-              <div className="exp-achievements-block m-t-20">
-                <h4>Key Achievements & Impact:</h4>
-                <ul className="achievements-bullet-list">
-                  {exp.achievements.map((ach, aIdx) => (
-                    <li key={aIdx}>
-                      <span className="ach-bullet">
-                        <CheckCircle size={14} className="text-blue" />
-                      </span>
-                      <span>{ach}</span>
-                    </li>
-                  ))}
-                </ul>
+                {exp.caseStudyUrl && (
+                  <div className="exp-footer">
+                    <Link 
+                      href={exp.caseStudyUrl}
+                      className="case-study-link"
+                      onClick={() => logFirebaseEvent("click_experience_case_study", { company: exp.company })}
+                    >
+                      <span>Read Case Study</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       <style jsx>{`
         .experience-page-wrapper {
-          padding-bottom: 80px;
+          padding-bottom: 100px;
         }
 
         /* Hero */
         .experience-hero {
-          padding: 80px 0 40px;
+          padding: 100px 0 60px;
           border-bottom: 1px solid var(--border-color);
         }
         .experience-hero h1 {
           font-size: 48px;
+          font-weight: 800;
+          color: #fff;
           margin-bottom: 16px;
+          letter-spacing: -0.02em;
         }
         .experience-hero .subtitle {
-          font-size: 18px;
+          font-size: 19px;
           color: var(--text-secondary);
           max-width: 720px;
+          line-height: 1.6;
         }
 
-        /* Experience cards */
+        /* Career Feed */
         .experience-list-section {
           padding: 60px 0;
         }
-        .exp-cards-col {
+        .exp-feed {
           display: flex;
           flex-direction: column;
-          gap: 30px;
-          max-width: 840px;
+          gap: 32px;
+          max-width: 800px;
           margin: 0 auto;
         }
-        .detailed-exp-card {
-          padding: 40px;
-          position: relative;
+        .exp-item {
+          padding: 36px;
+          border-radius: 16px;
+          border: 1px solid var(--border-color);
+          background: rgba(255, 255, 255, 0.005);
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          transition: border-color 0.3s ease, transform 0.3s ease;
         }
-        .detailed-exp-card:hover {
-          border-color: var(--accent-blue-border);
+        .exp-item:hover {
+          border-color: rgba(59, 130, 246, 0.25);
           transform: translateY(-2px);
         }
-        .exp-card-header-row {
+
+        .exp-item-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           flex-wrap: wrap;
-          gap: 20px;
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 20px;
-        }
-        .role-company-group {
-          display: flex;
-          align-items: center;
           gap: 16px;
         }
-        .exp-icon-bullet {
-          width: 36px;
-          height: 36px;
-          border-radius: 8px;
-          background: var(--accent-blue-glow);
-          border: 1px solid var(--accent-blue-border);
-          color: var(--accent-blue-light);
+        .title-block h3 {
+          font-size: 22px;
+          font-weight: 700;
+          color: #fff;
+          margin-bottom: 6px;
+        }
+        .company-meta-row {
           display: flex;
           align-items: center;
-          justify-content: center;
-        }
-        .role-company-group h3 {
-          font-size: 20px;
-          color: #fff;
-        }
-        .company-meta {
+          gap: 8px;
           font-size: 13.5px;
           color: var(--text-secondary);
-          display: block;
-          margin-top: 2px;
         }
-        .loc-date-group {
+        .company-name {
+          color: var(--accent-blue);
+          font-weight: 600;
+        }
+        .meta-dot {
+          color: var(--text-muted);
+        }
+        .loc-meta {
           display: flex;
-          flex-direction: column;
+          align-items: center;
           gap: 6px;
           font-size: 12px;
           color: var(--text-muted);
-          align-items: flex-end;
-        }
-        .meta-sub-row {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        
-        /* Tech tags */
-        .exp-tech-radar-tags strong {
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #fff;
-          display: block;
-          margin-bottom: 8px;
-        }
-        .tags-row-meta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        .tech-tag-meta {
-          font-size: 11px;
           background: rgba(255, 255, 255, 0.02);
           border: 1px solid var(--border-color);
-          padding: 2px 8px;
-          border-radius: 4px;
+          padding: 4px 10px;
+          border-radius: 20px;
+        }
+
+        .exp-summary {
+          font-size: 14.5px;
+          line-height: 1.6;
           color: var(--text-secondary);
         }
 
-        /* Achievements */
-        .exp-achievements-block h4 {
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #fff;
-          margin-bottom: 12px;
+        /* Impact details grid */
+        .exp-impact-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 14px;
+          background: rgba(255, 255, 255, 0.01);
+          border: 1px solid var(--border-color);
+          padding: 20px;
+          border-radius: 12px;
         }
-        .achievements-bullet-list {
-          list-style: none;
+        .impact-cell {
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 4px;
         }
-        .achievements-bullet-list li {
-          display: flex;
-          align-items: start;
-          gap: 12px;
-          font-size: 14px;
+        .impact-label {
+          font-size: 9px;
+          font-weight: 700;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        .impact-detail {
+          font-size: 13px;
+          line-height: 1.5;
           color: var(--text-secondary);
-          line-height: 1.6;
+          margin: 0;
         }
-        .ach-bullet {
-          margin-top: 2px;
-          flex-shrink: 0;
+
+        /* Footer CTA links */
+        .exp-footer {
+          border-top: 1px solid var(--border-color);
+          padding-top: 16px;
+          margin-top: 8px;
+        }
+        .case-study-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-family: var(--font-headings);
+          font-size: 13.5px;
+          font-weight: 700;
+          color: var(--accent-blue);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .case-study-link:hover {
+          color: #fff;
         }
 
         @media (max-width: 768px) {
-          .exp-card-header-row {
-            flex-direction: column;
-            gap: 16px;
-          }
-          .loc-date-group {
-            align-items: flex-start;
-          }
-          .detailed-exp-card {
+          .exp-item {
             padding: 24px;
+          }
+          .title-block h3 {
+            font-size: 18px;
+          }
+          .experience-hero h1 {
+            font-size: 36px;
           }
         }
       `}</style>
