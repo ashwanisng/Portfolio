@@ -55,9 +55,9 @@ export default function Footer() {
             </div>
 
             <div className="footer-links-col">
-              <h4>Philosophy</h4>
+              <h4>Resources</h4>
               <Link href="/process">My Process</Link>
-              <Link href="/thinking">How I Think</Link>
+              <Link href="/blog">Blog</Link>
               <Link href="/now">Now Page</Link>
               <Link href="/labs">Labs</Link>
             </div>
