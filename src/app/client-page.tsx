@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Copy, Check } from "lucide-react";
 import CountUp from "../components/CountUp";
 import HeroTicket from "../components/HeroTicket";
+import DoctorTerminal from "../components/DoctorTerminal";
 import availability from "../config/availability.json";
 
 type ClientHomePageProps = {
@@ -78,14 +79,6 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
       ]
     },
     {
-      title: "flutter_doctor_ai",
-      tag: "Open source",
-      year: "pub.dev",
-      desc: "Published Dart package that scans a Flutter codebase for warnings and lint issues and suggests fixes with Gemini or OpenAI.",
-      stack: ["Dart", "CLI", "LLM"],
-      links: [{ label: "pub.dev", href: "https://pub.dev/packages/flutter_doctor_ai" }]
-    },
-    {
       title: "ClosePitch",
       tag: "Own product · Beta",
       year: "Private beta",
@@ -94,6 +87,17 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
       links: [{ label: "Case study", href: "/projects/closepitch" }]
     }
   ];
+
+  // From pub.dev for flutter_doctor_ai 0.2.0
+  const doctorRules = [
+    { name: "large_build_method", catches: "build() methods growing to hundreds of lines" },
+    { name: "missing_dispose", catches: "Controllers leaking after the widget unmounts" },
+    { name: "missing_mounted_check", catches: "setState() on an unmounted widget" },
+    { name: "empty_setstate", catches: "setState(() {}) triggering silent rebuilds" },
+    { name: "print_statement", catches: "Debug print() shipping to production" }
+  ];
+  const doctorFacts = ["v0.2.0", "160/160 pub points", "MIT", "Groq · Gemini · OpenAI · Anthropic"];
+  const installCmd = "dart pub global activate flutter_doctor_ai";
 
   const offerings = [
     {
@@ -182,6 +186,17 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
     }
   ];
 
+  const [copied, setCopied] = useState(false);
+  const copyInstall = async () => {
+    try {
+      await navigator.clipboard.writeText(installCmd);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard can be unavailable (insecure context); the command stays selectable.
+    }
+  };
+
   const isExternal = (href: string) => !href.startsWith("/");
 
   return (
@@ -198,12 +213,13 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
             </div>
 
             <h1 className="hero-title animate-in-2">
-              Flutter apps where <em>money moves.</em>
+              Senior Flutter engineer who ships <em>production apps.</em>
             </h1>
 
             <p className="hero-lede animate-in-3">
-              I build trading screens, checkout flows and payment integrations that hold up in production.
-              Senior Mobile Engineer at HDFC Securities; previously Right Hands (Qatar), SOCTR and Hudle.
+              4+ years taking iOS and Android apps from first commit to the store: architecture, payments,
+              real-time features, CI/CD and releases. Senior Mobile Engineer at HDFC Securities; previously
+              Hudle, Right Hands, SOCTR and Mr. Milkman.
             </p>
 
             <div className="hero-actions animate-in-4">
@@ -348,6 +364,59 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
         </div>
       </section>
 
+      {/* Open source */}
+      <section className="oss" id="open-source">
+        <div className="container">
+          <div className="oss-panel reveal-on-scroll">
+            <div className="oss-copy">
+              <span className="section-tag">Open source · pub.dev</span>
+              <h2 className="oss-title">flutter_doctor_ai</h2>
+              <p className="oss-lede">
+                A CLI I built and maintain that finds Flutter-specific anti-patterns the built-in analyzer misses,
+                scores project health from 0 to 100, and asks your AI provider for a concrete fix.
+              </p>
+
+              <ul className="oss-facts">
+                {doctorFacts.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+
+              <ul className="oss-rules">
+                {doctorRules.map((r) => (
+                  <li key={r.name}>
+                    <code>{r.name}</code>
+                    <span>{r.catches}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="oss-install">
+                <code>{installCmd}</code>
+                <button type="button" onClick={copyInstall} aria-label="Copy install command">
+                  {copied ? <Check size={15} /> : <Copy size={15} />}
+                </button>
+              </div>
+
+              <div className="hero-actions">
+                <a href="https://pub.dev/packages/flutter_doctor_ai" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm">
+                  View on pub.dev
+                  <ArrowUpRight size={14} />
+                </a>
+                <a href="https://github.com/ashwanisng/flutter_doctor_ai" target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">
+                  Source on GitHub
+                  <ArrowUpRight size={14} />
+                </a>
+              </div>
+            </div>
+
+            <div className="oss-terminal">
+              <DoctorTerminal />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Offerings */}
       <section className="offer">
         <div className="container">
@@ -454,7 +523,7 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
           <div className="closing-panel reveal-on-scroll">
             <span className="section-tag">Next step</span>
             <h2 className="closing-title">
-              Shipping something where <em>money moves?</em>
+              Have an app to <em>build, fix or scale?</em>
             </h2>
             <p className="closing-lede">
               Tell me what you&apos;re building. I reply within 24 hours with how I&apos;d approach it.
@@ -522,7 +591,7 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
           color: var(--text-muted);
         }
         .hero-title {
-          font-size: 76px;
+          font-size: 68px;
           font-weight: 600;
           line-height: 0.98;
           letter-spacing: -0.055em;
@@ -816,6 +885,116 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
           margin-top: 8px;
         }
 
+        /* Open source */
+        .oss {
+          padding: 112px 0 40px;
+        }
+        .oss-panel {
+          display: grid;
+          grid-template-columns: 1fr 1.05fr;
+          gap: 56px;
+          align-items: center;
+          padding: 56px;
+          border: 1px solid var(--border-color);
+          border-radius: 24px;
+          background:
+            radial-gradient(500px 260px at 100% 100%, rgba(198, 242, 94, 0.06), transparent 70%),
+            var(--bg-secondary);
+        }
+        /* Let the terminal scroll inside its box instead of widening the grid */
+        .oss-copy,
+        .oss-terminal {
+          min-width: 0;
+        }
+        .oss-title {
+          font-family: var(--font-mono);
+          font-size: 40px;
+          font-weight: 500;
+          letter-spacing: -0.04em;
+          margin-bottom: 16px;
+        }
+        .oss-lede {
+          font-size: 16px;
+          line-height: 1.65;
+          color: var(--text-secondary);
+          margin-bottom: 20px;
+        }
+        .oss-facts {
+          list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 28px;
+        }
+        .oss-facts li {
+          font-family: var(--font-mono);
+          font-size: 11px;
+          color: var(--accent);
+          padding: 4px 10px;
+          border: 1px solid var(--accent-line);
+          border-radius: 999px;
+          background: var(--accent-soft);
+        }
+        .oss-rules {
+          list-style: none;
+          border-top: 1px solid var(--border-color);
+          margin-bottom: 28px;
+        }
+        .oss-rules li {
+          display: grid;
+          grid-template-columns: 190px 1fr;
+          gap: 16px;
+          padding: 11px 0;
+          border-bottom: 1px solid var(--border-color);
+          font-size: 14px;
+          color: var(--text-secondary);
+        }
+        .oss-rules code {
+          font-family: var(--font-mono);
+          font-size: 12.5px;
+          color: var(--text-primary);
+        }
+        .oss-install {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 10px 10px 16px;
+          border: 1px solid var(--border-hover);
+          border-radius: 10px;
+          background: var(--bg-primary);
+          margin-bottom: 24px;
+        }
+        .oss-install code {
+          flex: 1;
+          min-width: 0;
+          overflow-x: auto;
+          white-space: nowrap;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          color: var(--text-primary);
+        }
+        .oss-install code::before {
+          content: "$ ";
+          color: var(--accent);
+        }
+        .oss-install button {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: var(--bg-tertiary);
+          color: var(--text-secondary);
+          cursor: pointer;
+        }
+        .oss-install button:hover {
+          color: var(--accent);
+          border-color: var(--accent-line);
+        }
+
         /* Offerings + process */
         .offer {
           padding: 112px 0 40px;
@@ -1106,6 +1285,10 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
             grid-template-columns: 1fr;
             gap: 32px;
           }
+          .oss-panel {
+            grid-template-columns: 1fr;
+            padding: 40px;
+          }
           .faq-intro {
             position: static;
           }
@@ -1188,6 +1371,20 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
           }
           .closing-panel {
             padding: 44px 24px;
+          }
+          .oss {
+            padding-top: 80px;
+          }
+          .oss-panel {
+            padding: 28px 20px;
+            gap: 36px;
+          }
+          .oss-title {
+            font-size: 28px;
+          }
+          .oss-rules li {
+            grid-template-columns: 1fr;
+            gap: 2px;
           }
           .closing-title {
             font-size: 38px;

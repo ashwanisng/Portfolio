@@ -28,7 +28,7 @@ export default function Footer() {
               <span className="logo-text">Ashwani Singh</span>
             </Link>
             <p className="footer-desc">
-              Flutter engineer for fintech and payments apps: trading screens, checkout flows and payment gateway integrations.
+              Senior Flutter engineer building and shipping production iOS and Android apps. Maintainer of flutter_doctor_ai on pub.dev.
             </p>
             <div className="footer-meta-info">
               <div className="meta-row">
