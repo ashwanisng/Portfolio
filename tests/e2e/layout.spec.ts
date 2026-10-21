@@ -11,13 +11,15 @@ for (const route of ROUTES) {
 
         const res = await page.goto(route, { waitUntil: "networkidle" });
         expect(res?.status(), "page should load with HTTP 200").toBe(200);
+        // Soft assertions from here on: one test reports every problem on the page, not just the first.
         await revealAll(page);
         await page.waitForTimeout(300);
 
         await test.step("header, main content and footer are present", async () => {
-          await expect(page.locator("header.header-nav")).toBeVisible();
-          await expect(page.locator("main")).toBeVisible();
-          await expect(page.locator("footer")).toBeAttached();
+          await expect.soft(page.locator("header.header-nav")).toBeVisible();
+          await expect.soft(page.locator("main"), "page should have exactly one <main> landmark").toHaveCount(1);
+          await expect.soft(page.locator("main").first()).toBeVisible();
+          await expect.soft(page.locator("footer")).toBeAttached();
         });
 
         await test.step("no horizontal page scroll", async () => {
@@ -25,17 +27,17 @@ for (const route of ROUTES) {
             scrollWidth: document.documentElement.scrollWidth,
             clientWidth: document.documentElement.clientWidth,
           }));
-          expect(scrollWidth, "document is wider than the screen").toBeLessThanOrEqual(clientWidth);
+          expect.soft(scrollWidth, "document is wider than the screen").toBeLessThanOrEqual(clientWidth);
         });
 
         await test.step("no element sticks out past the screen edges", async () => {
           const hits = await findHorizontalOverflow(page);
-          expect(hits, `elements overflowing at ${vp.width}px:\n${JSON.stringify(hits, null, 2)}`).toEqual([]);
+          expect.soft(hits, `elements overflowing at ${vp.width}px:\n${JSON.stringify(hits, null, 2)}`).toEqual([]);
         });
 
         await test.step("no text is cut off inside its box", async () => {
           const clipped = await findClippedText(page);
-          expect(clipped, `clipped text at ${vp.width}px`).toEqual([]);
+          expect.soft(clipped, `clipped text at ${vp.width}px`).toEqual([]);
         });
 
         await test.step("all images load", async () => {
@@ -44,11 +46,11 @@ for (const route of ROUTES) {
               .filter((img) => img.complete && img.naturalWidth === 0)
               .map((img) => img.currentSrc || img.src)
           );
-          expect(broken, "broken images").toEqual([]);
+          expect.soft(broken, "broken images").toEqual([]);
         });
 
-        await test.step("buttons and links are large enough to tap on touch screens", async () => {
-          test.skip(vp.width > 768, "touch target check applies to phones and tablets");
+        // Touch-target size only matters on phones and tablets.
+        if (vp.width <= 768) await test.step("buttons and links are large enough to tap on touch screens", async () => {
           const small = await page.evaluate(() =>
             Array.from(document.querySelectorAll<HTMLElement>("main a, main button, header button"))
               .filter((el) => {
@@ -60,10 +62,10 @@ for (const route of ROUTES) {
               .map((el) => `${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute("aria-label") || "").trim().slice(0, 30)}"`)
               .slice(0, 10)
           );
-          expect(small, "tap targets smaller than 24×24px (WCAG 2.2 minimum)").toEqual([]);
+          expect.soft(small, "tap targets smaller than 24×24px (WCAG 2.2 minimum)").toEqual([]);
         });
 
-        expect(errors, "console errors, page errors or failed same-site requests").toEqual([]);
+        expect.soft(errors, "console errors, page errors or failed same-site requests").toEqual([]);
 
         if (process.env.E2E_SCREENSHOTS) {
           await testInfo.attach(`${route}-${vp.name}`, {

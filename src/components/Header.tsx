@@ -234,7 +234,7 @@ export default function Header() {
           right: -100%;
           width: 100%;
           height: 100vh;
-          background: rgba(11, 14, 20, 0.96);
+          background: rgba(9, 9, 11, 0.97);
           backdrop-filter: blur(20px);
           z-index: 1000;
           transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -247,7 +247,7 @@ export default function Header() {
           position: absolute;
           width: 300px;
           height: 300px;
-          background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, rgba(139, 92, 246, 0.02) 70%, transparent 100%);
+          background: radial-gradient(circle, rgba(198, 242, 94, 0.05) 0%, transparent 70%);
           bottom: -50px;
           left: -50px;
           filter: blur(40px);

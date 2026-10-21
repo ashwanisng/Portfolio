@@ -180,8 +180,11 @@ test("sitemap.xml is valid and every URL in it loads", async ({ request, page })
 test("404 page tells search engines not to index it", async ({ page }) => {
   const res = await page.goto("/this-page-does-not-exist");
   expect(res?.status()).toBe(404);
-  const robots = await page.locator('meta[name="robots"]').getAttribute("content");
-  expect(robots).toMatch(/noindex/);
+  const robots = await page.locator('meta[name="robots"]').evaluateAll((els) =>
+    els.map((el) => el.getAttribute("content") ?? "")
+  );
+  expect(robots.some((r) => /noindex/.test(r)), `robots tags: ${robots.join(" | ")}`).toBe(true);
+  expect(robots.filter((r) => /(^|,\s*)index/.test(r)), "a conflicting 'index' robots tag is also present").toEqual([]);
 });
 
 test("favicon and web manifest are served", async ({ request }) => {

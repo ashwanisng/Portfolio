@@ -144,7 +144,9 @@ test.describe("homepage CTAs", () => {
       HarborMoor: /squareboat\.com\/clients\/harbormoor/,
     };
     for (const [name, href] of Object.entries(expected)) {
-      const tile = page.locator(".client-wall .client-cell", { hasText: name });
+      const tile = page.locator(".client-wall .client-cell").filter({
+        has: page.locator(".client-name", { hasText: new RegExp(`^${name.replace(/[.]/g, "\\.")}$`) }),
+      });
       await expect(tile, `${name} tile`).toHaveCount(1);
       await expect(tile).toHaveAttribute("href", href);
     }
