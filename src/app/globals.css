@@ -701,18 +701,6 @@ select:focus-visible {
   font-size: 15px;
   color: var(--text-secondary);
   letter-spacing: -0.01em;
-  display: flex;
-  flex-direction: column;
-  min-width: 120px;
-}
-
-.logo-role {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: 0;
-  margin-top: 2px;
 }
 
 .logo-separator {

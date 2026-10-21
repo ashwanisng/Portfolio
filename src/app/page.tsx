@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import CountUp from "../components/CountUp";
+import availability from "../config/availability.json";
 import { 
   ArrowRight, 
   CheckCircle, 
@@ -24,13 +26,21 @@ import {
 export default function Home() {
 
 
-  const trustedBy = [
-    { name: "HDFC Securities", role: "Trading app" },
-    { name: "RightHand, Qatar", role: "Payments revamp" },
-    { name: "SOCTR", role: "Live market data" },
-    { name: "Hudle", role: "Booking & partner apps" },
-    { name: "MrMilkman by EverAg", role: "Subscriptions & CI/CD" },
-    { name: "Squareboat", role: "Client apps" }
+  const stats = [
+    { end: 4, suffix: "+", label: "Years shipping Flutter" },
+    { end: 7, suffix: "", label: "Companies & clients" },
+    { end: 5, suffix: "+", label: "Apps live on the stores" },
+    { end: 100000, suffix: "+", label: "Users reached" }
+  ];
+
+  const clients = [
+    { name: "HDFC Securities", initials: "HS", color: "blue", region: "India", work: "Trading app", period: "2026 – now", href: "/experience" },
+    { name: "RightHand", initials: "RH", color: "purple", region: "Qatar", work: "Payments & UX revamp", period: "2025 – 26", href: "https://apps.apple.com/us/app/right-hands/id1641289996" },
+    { name: "SOCTR", initials: "SO", color: "green", region: "India", work: "Live market data", period: "2024", href: "https://apps.apple.com/us/app/soctr/id6479616881" },
+    { name: "Hudle", initials: "HU", color: "orange", region: "India", work: "Booking & partner apps", period: "2024 – 26", href: "https://apps.apple.com/in/app/hudle/id1398246473" },
+    { name: "MrMilkman by EverAg", initials: "MM", color: "pink", region: "India", work: "Subscriptions & CI/CD", period: "2023 – 24", href: "/projects" },
+    { name: "Squareboat", initials: "SB", color: "blue", region: "India", work: "Client apps", period: "2022 – 23", href: "/experience" },
+    { name: "goStops", initials: "GS", color: "purple", region: "India · via Squareboat", work: "Travel booking app", period: "2022 – 23", href: "https://apps.apple.com/in/app/gostops/id1538056051" }
   ];
 
   const selectedWork = [
@@ -198,18 +208,6 @@ export default function Home() {
                 Book a Call
               </Link>
             </div>
-
-            <div className="hero-credibility-logos animate-fade-up-4">
-              <span className="logos-title">WHERE I&apos;VE SHIPPED</span>
-              <div className="logos-row">
-                {trustedBy.map((item) => (
-                  <span key={item.name} className="logo-item">
-                    {item.name}
-                    <span className="logo-role">{item.role}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div className="hero-mockup-wrapper animate-fade-up-5">
@@ -288,6 +286,54 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Clients & Numbers */}
+      <section className="clients-section">
+        <div className="container">
+          <div className="stats-row">
+            {stats.map((stat) => (
+              <div key={stat.label} className="stat-tile">
+                <span className="stat-value">
+                  <CountUp end={stat.end} suffix={stat.suffix} />
+                </span>
+                <span className="stat-label">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <span className="clients-title">COMPANIES & CLIENTS I&apos;VE SHIPPED FOR</span>
+          <div className="clients-grid">
+            {clients.map((client) => {
+              const body = (
+                <>
+                  <span className={`client-mark ${client.color}`}>{client.initials}</span>
+                  <span className="client-info">
+                    <span className="client-name">{client.name}</span>
+                    <span className="client-work">{client.work}</span>
+                    <span className="client-meta">{client.region} · {client.period}</span>
+                  </span>
+                </>
+              );
+              return client.href.startsWith("/") ? (
+                <Link key={client.name} href={client.href} className="client-tile card-glass">
+                  {body}
+                </Link>
+              ) : (
+                <a key={client.name} href={client.href} target="_blank" rel="noopener noreferrer" className="client-tile card-glass">
+                  {body}
+                </a>
+              );
+            })}
+            <Link href="/contact" className="client-tile client-tile-cta">
+              <span className="client-mark cta">+</span>
+              <span className="client-info">
+                <span className="client-name">Your app next?</span>
+                <span className="client-work">{availability.capacity} open now</span>
+              </span>
+            </Link>
           </div>
         </div>
       </section>
@@ -389,10 +435,6 @@ export default function Home() {
       <section className="highlights-bar-section">
         <div className="container">
           <div className="highlights-grid">
-            <div className="highlight-stat-item reveal-on-scroll">
-              <span className="num">4+ Years</span>
-              <span className="lbl">Professional Experience</span>
-            </div>
             <div className="highlight-stat-item reveal-on-scroll reveal-delay-1">
               <span className="num">Trading & Fintech</span>
               <span className="lbl">HDFC Securities · SOCTR</span>
@@ -889,6 +931,111 @@ export default function Home() {
         .featured-showcase-section {
           padding: 40px 0 100px;
         }
+        /* Clients & Numbers */
+        .clients-section {
+          padding: 20px 0 60px;
+        }
+        .stats-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          padding: 32px 0;
+          margin-bottom: 48px;
+          border-top: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--border-color);
+        }
+        .stat-tile {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 6px;
+        }
+        .stat-value {
+          font-family: var(--font-headings);
+          font-size: 44px;
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: #fff;
+          font-variant-numeric: tabular-nums;
+        }
+        .stat-label {
+          font-size: 12px;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .clients-title {
+          display: block;
+          font-family: var(--font-headings);
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--text-muted);
+          letter-spacing: 0.15em;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+        .clients-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+        .clients-grid :global(.client-tile) {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 18px;
+          color: inherit;
+          text-decoration: none;
+        }
+        .clients-grid :global(.client-tile:hover) {
+          border-color: var(--accent-blue-border);
+          transform: translateY(-3px);
+        }
+        .client-mark {
+          flex-shrink: 0;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--font-headings);
+          font-size: 15px;
+          font-weight: 700;
+        }
+        .clients-grid :global(.client-tile-cta) {
+          border: 1px dashed var(--accent-blue-border);
+          border-radius: 16px;
+        }
+        .client-mark.cta { background: var(--accent-blue-glow); color: var(--accent-blue-light); font-size: 22px; }
+        .client-mark.blue { background: rgba(37, 99, 235, 0.12); color: var(--accent-blue-light); }
+        .client-mark.purple { background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); }
+        .client-mark.green { background: rgba(16, 185, 129, 0.12); color: var(--accent-green); }
+        .client-mark.orange { background: rgba(249, 115, 22, 0.12); color: #f97316; }
+        .client-mark.pink { background: rgba(236, 72, 153, 0.12); color: #ec4899; }
+        .client-info {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+        }
+        .client-name {
+          font-family: var(--font-headings);
+          font-size: 15px;
+          font-weight: 700;
+          color: #fff;
+        }
+        .client-work {
+          font-size: 13px;
+          color: var(--text-secondary);
+        }
+        .client-meta {
+          font-size: 11px;
+          color: var(--text-muted);
+          margin-top: 2px;
+        }
+
         .work-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -1211,8 +1358,8 @@ export default function Home() {
           .work-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-          .logos-row {
-            justify-content: center;
+          .clients-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
           .services-grid-outcomes {
             grid-template-columns: 1fr;
@@ -1236,6 +1383,13 @@ export default function Home() {
           .work-grid {
             grid-template-columns: 1fr;
           }
+          .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 28px;
+          }
+          .stat-value {
+            font-size: 36px;
+          }
           .highlights-grid {
             justify-content: center;
           }
@@ -1254,6 +1408,9 @@ export default function Home() {
           }
           .highlight-stat-item {
             flex: 1 1 100% !important;
+          }
+          .clients-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
