@@ -28,7 +28,7 @@ export default function Footer() {
               <span className="logo-text">Ashwani Singh</span>
             </Link>
             <p className="footer-desc">
-              Mobile Product Engineer building production-grade mobile applications and scalable digital solutions for startups globally.
+              Senior Flutter engineer building and shipping production iOS and Android apps. Maintainer of flutter_doctor_ai on pub.dev.
             </p>
             <div className="footer-meta-info">
               <div className="meta-row">
@@ -37,7 +37,7 @@ export default function Footer() {
               </div>
               <div className="meta-row">
                 <span className="meta-lbl">Timezone:</span>
-                <span className="meta-val">Europe / UAE / US overlap alignment</span>
+                <span className="meta-val">IST, with Gulf, Europe and US overlap</span>
               </div>
               <div className="meta-row">
                 <span className="availability-badge-footer">Open to remote contracts</span>

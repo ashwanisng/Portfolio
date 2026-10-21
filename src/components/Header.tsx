@@ -139,7 +139,7 @@ export default function Header() {
           left: 0;
           width: 100%;
           height: var(--header-height);
-          background: rgba(3, 2, 8, 0.7);
+          background: rgba(9, 9, 11, 0.72);
           backdrop-filter: blur(16px);
           border-bottom: 1px solid var(--border-color);
           z-index: 100;
@@ -147,8 +147,8 @@ export default function Header() {
         }
         .header-nav.scrolled {
           height: 64px;
-          background: rgba(3, 2, 8, 0.9);
-          box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+          background: rgba(9, 9, 11, 0.9);
+          box-shadow: none;
         }
         .header-nav-container {
           max-width: var(--max-width);
