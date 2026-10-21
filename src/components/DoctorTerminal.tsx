@@ -78,7 +78,7 @@ export default function DoctorTerminal() {
         <span className="terminal-tag">Sample run</span>
       </div>
       {/* Reserve the full height so the page doesn't jump while lines appear */}
-      <pre className="terminal-body" aria-label="Sample flutter_doctor_ai output">
+      <pre className="terminal-body" aria-label="Sample flutter_doctor_ai output" tabIndex={0}>
         {LINES.map((line, i) => (
           <span key={i} className={`line ${line.tone ?? ""}`} style={{ visibility: i < shown ? "visible" : "hidden" }}>
             {line.text || " "}

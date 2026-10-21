@@ -392,7 +392,8 @@ export default function ClientHomePage({ logos }: ClientHomePageProps) {
               </ul>
 
               <div className="oss-install">
-                <code>{installCmd}</code>
+                {/* Focusable so keyboard users can scroll the command on narrow screens */}
+                <code tabIndex={0}>{installCmd}</code>
                 <button type="button" onClick={copyInstall} aria-label="Copy install command">
                   {copied ? <Check size={15} /> : <Copy size={15} />}
                 </button>
