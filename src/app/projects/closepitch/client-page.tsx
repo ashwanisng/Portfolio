@@ -161,7 +161,7 @@ export default function ClientClosePitchPage() {
                 <a href="#deployment">12. Deployment Setup</a>
                 <a href="#performance">13. Performance Tuning</a>
                 <a href="#challenges">14. Technical Challenges</a>
-                <a href="#results">15. Outcomes & Results</a>
+                <a href="#results">15. Current Status</a>
                 <a href="#roadmap">16. Future Roadmap</a>
               </nav>
             </div>
@@ -436,22 +436,22 @@ export default function ClientClosePitchPage() {
 
             {/* Chapter 15 */}
             <article id="results" className="chapter-block">
-              <h2 className="chapter-heading">15. Outcomes & Results</h2>
+              <h2 className="chapter-heading">15. Current Status</h2>
               <p>
-                ClosePitch has delivered clear outcome improvements based on production tracking metrics:
+                ClosePitch is in private beta. Business metrics will be published here once there is enough real usage to report them honestly. What is built and running today:
               </p>
               <div className="metrics-row-display">
                 <div className="metric-out-card card-glass">
-                  <span className="num">99.5%</span>
-                  <span className="lbl">Crash-Free Rate</span>
+                  <span className="num">Beta</span>
+                  <span className="lbl">Private Testing</span>
                 </div>
                 <div className="metric-out-card card-glass">
-                  <span className="num">+35%</span>
-                  <span className="lbl">Lead Conversion Gain</span>
+                  <span className="num">Offline</span>
+                  <span className="lbl">SQLite Draft Sync</span>
                 </div>
                 <div className="metric-out-card card-glass">
-                  <span className="num">-60%</span>
-                  <span className="lbl">Server Latency (Redis)</span>
+                  <span className="num">Redis</span>
+                  <span className="lbl">Cached Go APIs</span>
                 </div>
               </div>
             </article>
