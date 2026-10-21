@@ -1,5 +1,6 @@
 "use client";
 
+import availability from "../../config/availability.json";
 import { useState } from "react";
 import Link from "next/link";
 import { 
@@ -522,11 +523,11 @@ export default function ClientServicesPage() {
             <div className="av-grid">
               <div className="av-item">
                 <span className="av-lbl font-mono">AVAILABILITY</span>
-                <span className="av-val text-emerald">Available for Partnering</span>
+                <span className="av-val text-emerald">{availability.text}</span>
               </div>
               <div className="av-item">
-                <span className="av-lbl font-mono">NEXT SLOT</span>
-                <span className="av-val text-purple">September 2026</span>
+                <span className="av-lbl font-mono">CAPACITY</span>
+                <span className="av-val text-purple">{availability.capacity}</span>
               </div>
               <div className="av-item">
                 <span className="av-lbl font-mono">RESPONSE SPEED</span>

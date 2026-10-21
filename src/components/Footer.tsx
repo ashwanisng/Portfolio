@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="availability-banner">
             <span className={`status-indicator ${isAvailable ? "available" : ""}`}></span>
             <span className="availability-text">
-              {availability.text} — Next slot: <strong className="slot-date">{availability.nextSlot}</strong>
+              {availability.text} — <strong className="slot-date">{availability.capacity}</strong>
             </span>
             <Link href="/contact" className="availability-link">
               Discuss Your Project &rarr;

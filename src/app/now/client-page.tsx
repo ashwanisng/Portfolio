@@ -1,5 +1,6 @@
 "use client";
 
+import availability from "../../config/availability.json";
 import Link from "next/link";
 import { Clock, BookOpen, Sparkles, Code, Briefcase, ArrowLeft } from "lucide-react";
 
@@ -60,7 +61,7 @@ export default function ClientNowPage() {
                 <h3>Availability</h3>
               </div>
               <p>
-                🟢 **Available for Freelance Projects.** I am accepting inquiries for fixed-scope MVP builds and technical Retainer contracts starting in **August 2026**.
+                🟢 <strong>{availability.text} — {availability.capacity}.</strong> I am accepting fixed-scope builds and part-time retainer contracts, with a reply within 24 hours.
               </p>
             </div>
           </div>

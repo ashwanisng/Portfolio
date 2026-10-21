@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import CountUp from "../components/CountUp";
+import availability from "../config/availability.json";
 import { 
   ArrowRight, 
   CheckCircle, 
@@ -17,28 +19,134 @@ import {
   Sparkles,
   GitBranch,
   ShieldCheck,
-  TrendingUp
+  TrendingUp,
+  ArrowUpRight
 } from "lucide-react";
 
 export default function Home() {
 
 
-  // Testimonial State
-  const [activeSlide, setActiveSlide] = useState(0);
-  const testimonials = [
+  const stats = [
+    { end: 4, suffix: "+", label: "Years shipping Flutter" },
+    { end: 7, suffix: "", label: "Companies & clients" },
+    { end: 5, suffix: "+", label: "Apps live on the stores" },
+    { end: 100000, suffix: "+", label: "Users reached" }
+  ];
+
+  const clients = [
+    { name: "HDFC Securities", initials: "HS", color: "blue", region: "India", work: "Trading app", period: "2026 – now", href: "/experience" },
+    { name: "RightHand", initials: "RH", color: "purple", region: "Qatar", work: "Payments & UX revamp", period: "2025 – 26", href: "https://apps.apple.com/us/app/right-hands/id1641289996" },
+    { name: "SOCTR", initials: "SO", color: "green", region: "India", work: "Live market data", period: "2024", href: "https://apps.apple.com/us/app/soctr/id6479616881" },
+    { name: "Hudle", initials: "HU", color: "orange", region: "India", work: "Booking & partner apps", period: "2024 – 26", href: "https://apps.apple.com/in/app/hudle/id1398246473" },
+    { name: "MrMilkman by EverAg", initials: "MM", color: "pink", region: "India", work: "Subscriptions & CI/CD", period: "2023 – 24", href: "/projects" },
+    { name: "Squareboat", initials: "SB", color: "blue", region: "India", work: "Client apps", period: "2022 – 23", href: "/experience" },
+    { name: "goStops", initials: "GS", color: "purple", region: "India · via Squareboat", work: "Travel booking app", period: "2022 – 23", href: "https://apps.apple.com/in/app/gostops/id1538056051" }
+  ];
+
+  const selectedWork = [
     {
-      quote: "Ashwani is an exceptional Flutter developer who takes complete ownership. He redesigned our app interface and always focuses on high performance and widget optimization."
+      tag: "TRADING · INDIA",
+      title: "HDFC Securities",
+      desc: "Senior Mobile Engineer on the trading app of one of India's largest brokerages. Current role.",
+      bullets: [
+        "Flutter architecture for trading features",
+        "Shipping with product and backend squads",
+        "Details covered by NDA"
+      ],
+      links: [{ label: "Experience", href: "/experience" }]
     },
     {
-      quote: "He has a strong product mindset, understands the big picture, and delivers robust Flutter architectures. Extremely reliable and key in streamlining our API caching and SDK tracking."
+      tag: "FINTECH · INDIA",
+      title: "SOCTR",
+      desc: "Social investing app with AI market insights. Built from scratch as the sole Flutter developer.",
+      bullets: [
+        "WebSocket ticker feeds parsed in background isolates",
+        "Candle charts and TradingView widgets at 60fps",
+        "Custom OTP login flow"
+      ],
+      links: [
+        { label: "Google Play", href: "https://play.google.com/store/apps/details?id=com.soctrapp.android" },
+        { label: "App Store", href: "https://apps.apple.com/us/app/soctr/id6479616881" }
+      ]
     },
     {
-      quote: "Delivered the subscription management and tracking apps on time with a 99.5% crash-free rate. Communication was excellent and implementation was top tier."
+      tag: "PAYMENTS · QATAR",
+      title: "RightHand",
+      desc: "Full UX revamp and checkout rebuild for an on-demand home services marketplace.",
+      bullets: [
+        "Stripe and MyFatoorah integration",
+        "Checkout state that survives app-to-bank switches",
+        "Crashlytics monitoring and custom analytics"
+      ],
+      links: [
+        { label: "Google Play", href: "https://play.google.com/store/apps/details?id=com.righthands" },
+        { label: "App Store", href: "https://apps.apple.com/us/app/right-hands/id1641289996" }
+      ]
+    },
+    {
+      tag: "BOOKINGS · INDIA",
+      title: "Hudle",
+      desc: "Redesigned consumer booking flows and built the B2B partner app for a sports venue marketplace.",
+      bullets: [
+        "Schedule grids for heavy venue configurations",
+        "AppsFlyer and Mixpanel attribution",
+        "Codemagic release pipelines"
+      ],
+      links: [
+        { label: "Google Play", href: "https://play.google.com/store/apps/details?id=com.hudle.app" },
+        { label: "App Store", href: "https://apps.apple.com/in/app/hudle/id1398246473" }
+      ]
+    },
+    {
+      tag: "OPEN SOURCE",
+      title: "flutter_doctor_ai",
+      desc: "Published Dart package that scans a Flutter codebase for warnings and lint issues and suggests fixes with AI.",
+      bullets: [
+        "Public on pub.dev",
+        "Gemini / OpenAI backed suggestions",
+        "CLI and package usage"
+      ],
+      links: [{ label: "pub.dev", href: "https://pub.dev/packages/flutter_doctor_ai" }]
+    },
+    {
+      tag: "OWN PRODUCT · PRIVATE BETA",
+      title: "ClosePitch",
+      desc: "AI sales assistant I'm building end to end: Flutter app, Go services on AWS, LLM pitch drafting.",
+      bullets: [
+        "Schema-validated LLM output with retries",
+        "Offline draft sync via SQLite",
+        "Redis-cached Go APIs"
+      ],
+      links: [{ label: "Case study", href: "/projects/closepitch" }]
     }
   ];
 
+  // Testimonial State
+  const [activeSlide, setActiveSlide] = useState(0);
+  // Only attributed quotes are shown. Fill in `author` and `role` (e.g. "Engineering Manager, Hudle")
+  // with the person's permission to publish a quote.
+  const allTestimonials = [
+    {
+      quote: "Ashwani is an exceptional Flutter developer who takes complete ownership. He redesigned our app interface and always focuses on high performance and widget optimization.",
+      author: "",
+      role: ""
+    },
+    {
+      quote: "He has a strong product mindset, understands the big picture, and delivers robust Flutter architectures. Extremely reliable and key in streamlining our API caching and SDK tracking.",
+      author: "",
+      role: ""
+    },
+    {
+      quote: "Delivered the subscription management and tracking apps on time with a 99.5% crash-free rate. Communication was excellent and implementation was top tier.",
+      author: "",
+      role: ""
+    }
+  ];
+  const testimonials = allTestimonials.filter((t) => t.author);
+
   // Auto-play Testimonials
   useEffect(() => {
+    if (testimonials.length < 2) return;
     const slideInterval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % testimonials.length);
     }, 8000);
@@ -54,7 +162,7 @@ export default function Home() {
   const faqs = [
     {
       question: "How quickly can you start?",
-      answer: "I am typically able to onboard and kick off new projects within 2 to 3 weeks, depending on my current contract pipeline and the clarity of your initial requirements."
+      answer: "I have 20 hours a week open right now, so I can usually start within a week of agreeing scope. Smaller fixed-price tasks (a bug fix, a payment gateway integration, a performance audit) can often start in a couple of days."
     },
     {
       question: "What time zones do you overlap with?",
@@ -84,12 +192,12 @@ export default function Home() {
       <section className="hero-block">
         <div className="container hero-grid">
           <div className="hero-main-content">
-            <span className="hero-pill-badge animate-fade-up-1">Mobile Product Engineer</span>
+            <span className="hero-pill-badge animate-fade-up-1">Flutter Engineer · Fintech & Payments</span>
             <h1 className="hero-heading-outcome animate-fade-up-2">
-              Building <span className="text-glow-blue">production-ready</span> mobile products that startups can launch and scale with confidence.
+              Flutter apps where <span className="text-glow-blue">money moves</span>.
             </h1>
             <p className="hero-subheading-outcome animate-fade-up-3">
-              Built production applications using Flutter, Go, AWS, Firebase and AI technologies. Specializing in cross-platform mobile apps, custom AI integration workflows, and scalable architectures.
+              Trading screens, checkout flows and payment gateway integrations. Senior Mobile Engineer at HDFC Securities; previously shipped real-time market data for a fintech app, Stripe and MyFatoorah checkout for a Qatar marketplace, and booking flows for Hudle. Available for freelance work, 20 hrs/week.
             </p>
             <div className="hero-buttons-row animate-fade-up-4">
               <Link href="/projects" className="btn btn-primary">
@@ -100,19 +208,6 @@ export default function Home() {
                 Book a Call
               </Link>
             </div>
-
-            <div className="hero-credibility-logos animate-fade-up-4">
-              <span className="logos-title">TRUSTED BY STARTUPS AND TEAMS AT</span>
-              <div className="logos-row">
-                <span className="logo-item">Hudle</span>
-                <span className="logo-separator">•</span>
-                <span className="logo-item">MrMilkman</span>
-                <span className="logo-separator">•</span>
-                <span className="logo-item">Squareboat</span>
-                <span className="logo-separator">•</span>
-                <span className="logo-item">EverAg</span>
-              </div>
-            </div>
           </div>
 
           <div className="hero-mockup-wrapper animate-fade-up-5">
@@ -120,16 +215,16 @@ export default function Home() {
             
             {/* Floating Glassmorphic Cards */}
             <div className="floating-card hero-ai-card glassmorphic-float">
-              <span className="card-lbl">AI GENERATIVE PITCH</span>
-              <p className="card-prompt">Prompt: Generate saas pitch...</p>
+              <span className="card-lbl">LIVE MARKET FEED</span>
+              <p className="card-prompt">Parsing ticks off the UI isolate...</p>
               <div className="typing-dots">
                 <span></span><span></span><span></span>
               </div>
             </div>
 
             <div className="floating-card hero-chart-card glassmorphic-float">
-              <span className="card-lbl">CONVERSIONS</span>
-              <span className="card-val">+34.8%</span>
+              <span className="card-lbl">CHART RENDERING</span>
+              <span className="card-val">60fps</span>
               <div className="mini-bar-chart">
                 <div className="bar" style={{ height: "40%" }}></div>
                 <div className="bar" style={{ height: "60%" }}></div>
@@ -138,11 +233,11 @@ export default function Home() {
             </div>
 
             <div className="floating-card hero-stack-card glassmorphic-float">
-              <span className="card-lbl">STACK TRUST</span>
+              <span className="card-lbl">PAYMENTS STACK</span>
               <div className="badge-row">
                 <span className="badge-sm">Flutter</span>
-                <span className="badge-sm">Go</span>
-                <span className="badge-sm">AWS</span>
+                <span className="badge-sm">Stripe</span>
+                <span className="badge-sm">MyFatoorah</span>
               </div>
             </div>
 
@@ -160,37 +255,136 @@ export default function Home() {
                   </div>
                   <div className="phone-content">
                     <div className="mini-app-header">
-                      <span className="mini-app-logo">ClosePitch</span>
+                      <span className="mini-app-logo">Checkout</span>
                       <div className="mini-user-avatar"></div>
                     </div>
                     <div className="mini-app-hero">
-                      <span className="mini-lbl">AI Pitch Generator</span>
+                      <span className="mini-lbl">Deep cleaning · 3 hrs</span>
                       <div className="mini-chat-bubble">
-                        Generating optimized SaaS leads in real time...
+                        Redirecting to bank for 3-D Secure...
                       </div>
                     </div>
                     
                     <div className="mini-popup-bubble">
-                      <span>✓ Pitch Sent! +$2,500</span>
+                      <span>✓ Payment confirmed</span>
                     </div>
 
                     <div className="mini-metric-grid">
                       <div className="mini-m-card">
-                        <span className="mini-lbl">Conversions</span>
-                        <span className="mini-val pulsing">+25%</span>
+                        <span className="mini-lbl">Card</span>
+                        <span className="mini-val">•• 4242</span>
                       </div>
                       <div className="mini-m-card">
-                        <span className="mini-lbl">Uptime</span>
-                        <span className="mini-val">99.9%</span>
+                        <span className="mini-lbl">Amount</span>
+                        <span className="mini-val pulsing">QR 240</span>
                       </div>
                     </div>
                     <div className="mini-app-footer">
-                      <span className="mini-lbl">Go Microservices backend</span>
+                      <span className="mini-lbl">BLoC checkout</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Clients & Numbers */}
+      <section className="clients-section">
+        <div className="container">
+          <div className="stats-row">
+            {stats.map((stat) => (
+              <div key={stat.label} className="stat-tile">
+                <span className="stat-value">
+                  <CountUp end={stat.end} suffix={stat.suffix} />
+                </span>
+                <span className="stat-label">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <span className="clients-title">COMPANIES & CLIENTS I&apos;VE SHIPPED FOR</span>
+          <div className="clients-grid">
+            {clients.map((client) => {
+              const body = (
+                <>
+                  <span className={`client-mark ${client.color}`}>{client.initials}</span>
+                  <span className="client-info">
+                    <span className="client-name">{client.name}</span>
+                    <span className="client-work">{client.work}</span>
+                    <span className="client-meta">{client.region} · {client.period}</span>
+                  </span>
+                </>
+              );
+              return client.href.startsWith("/") ? (
+                <Link key={client.name} href={client.href} className="client-tile card-glass">
+                  {body}
+                </Link>
+              ) : (
+                <a key={client.name} href={client.href} target="_blank" rel="noopener noreferrer" className="client-tile card-glass">
+                  {body}
+                </a>
+              );
+            })}
+            <Link href="/contact" className="client-tile client-tile-cta">
+              <span className="client-mark cta">+</span>
+              <span className="client-info">
+                <span className="client-name">Your app next?</span>
+                <span className="client-work">{availability.capacity} open now</span>
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Selected Work */}
+      <section className="featured-showcase-section">
+        <div className="container">
+          <div className="section-header reveal-on-scroll">
+            <span className="section-tag">SELECTED WORK</span>
+            <h2 className="section-title">Shipped Apps You Can Check</h2>
+            <p className="section-subtitle">
+              Live store listings, a public package, and one product of my own in beta.
+            </p>
+          </div>
+
+          <div className="work-grid">
+            {selectedWork.map((work, idx) => (
+              <div key={work.title} className={`work-card card-glass reveal-on-scroll reveal-delay-${idx % 3}`}>
+                <span className="work-tag">{work.tag}</span>
+                <h3>{work.title}</h3>
+                <p className="work-desc">{work.desc}</p>
+                <div className="outcome-bullets">
+                  {work.bullets.map((bullet) => (
+                    <div key={bullet} className="bullet-item">
+                      <CheckCircle size={14} className="text-blue" />
+                      <span>{bullet}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="work-links">
+                  {work.links.map((link) =>
+                    link.href.startsWith("/") ? (
+                      <Link key={link.label} href={link.href} className="work-link">
+                        {link.label} <ArrowRight size={12} />
+                      </Link>
+                    ) : (
+                      <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="work-link">
+                        {link.label} <ArrowUpRight size={12} />
+                      </a>
+                    )
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="showcase-ctas text-center m-t-40">
+            <Link href="/projects" className="btn btn-outline btn-sm">
+              All Case Studies
+              <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
@@ -237,95 +431,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Showcase Section */}
-      <section className="featured-showcase-section">
-        <div className="container">
-          <div className="showcase-card-layout card-glass reveal-on-scroll">
-            <div className="showcase-content">
-              <span className="showcase-tag">FLAGSHIP SHOWCASE</span>
-              <h2 className="showcase-title">ClosePitch</h2>
-              <p className="showcase-desc">
-                An AI-powered sales productivity platform that helps sales professionals automate pitch drafts, track customer conversions, and manage leads in real time.
-              </p>
-              
-              <div className="outcome-bullets">
-                <div className="bullet-item">
-                  <CheckCircle size={16} className="text-blue" />
-                  <span>Interactive AI Pitch Generation workflow</span>
-                </div>
-                <div className="bullet-item">
-                  <CheckCircle size={16} className="text-blue" />
-                  <span>Go microservices backend on AWS</span>
-                </div>
-                <div className="bullet-item">
-                  <CheckCircle size={16} className="text-blue" />
-                  <span>Real-time Redis caching and telemetry</span>
-                </div>
-              </div>
-
-              <div className="showcase-ctas">
-                <Link href="/projects/closepitch" className="btn btn-primary btn-sm">
-                  Read ClosePitch Case Study
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual">
-              <div className="glow-mesh-center"></div>
-              {/* Custom CSS Browser Frame Mockup */}
-              <div className="browser-mockup-frame">
-                <div className="browser-bar">
-                  <div className="dots-row">
-                    <span className="b-dot red"></span>
-                    <span className="b-dot yellow"></span>
-                    <span className="b-dot green"></span>
-                  </div>
-                  <span className="browser-url">closepitch.com/dashboard</span>
-                </div>
-                <div className="browser-mock-body">
-                  <div className="mock-sidebar">
-                    <span className="mock-logo">CP</span>
-                    <div className="mock-nav-item active"></div>
-                    <div className="mock-nav-item"></div>
-                    <div className="mock-nav-item"></div>
-                  </div>
-                  <div className="mock-main">
-                    <div className="mock-grid-row">
-                      <div className="mock-box"></div>
-                      <div className="mock-box"></div>
-                      <div className="mock-box"></div>
-                    </div>
-                    <div className="mock-chart-box">
-                      <div className="mock-chart-line"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Highlights Bar */}
       <section className="highlights-bar-section">
         <div className="container">
           <div className="highlights-grid">
-            <div className="highlight-stat-item reveal-on-scroll">
-              <span className="num">4+ Years</span>
-              <span className="lbl">Professional Experience</span>
-            </div>
             <div className="highlight-stat-item reveal-on-scroll reveal-delay-1">
-              <span className="num">✅ Production Apps</span>
-              <span className="lbl">Built & Launched Live</span>
+              <span className="num">Trading & Fintech</span>
+              <span className="lbl">HDFC Securities · SOCTR</span>
             </div>
             <div className="highlight-stat-item reveal-on-scroll reveal-delay-2">
-              <span className="num">AI-Enabled SaaS</span>
-              <span className="lbl">Utility & Context Integration</span>
+              <span className="num">Payment Gateways</span>
+              <span className="lbl">Stripe · MyFatoorah</span>
             </div>
             <div className="highlight-stat-item reveal-on-scroll reveal-delay-3">
-              <span className="num">Go Microservices</span>
-              <span className="lbl">Robust REST & Caching APIs</span>
+              <span className="num">Real-time Data</span>
+              <span className="lbl">WebSockets · Isolates · 60fps</span>
             </div>
             <div className="highlight-stat-item reveal-on-scroll reveal-delay-4">
               <span className="num">AWS & Cloud</span>
@@ -485,7 +605,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* Testimonials with Quotes Only */}
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
       <section className="testimonials-home-section">
         <div className="container">
           <div className="section-header text-center m-b-40">
@@ -499,6 +620,10 @@ export default function Home() {
               <p className="testimonial-text-large">
                 {testimonials[activeSlide].quote}
               </p>
+              <span className="testimonial-author">
+                {testimonials[activeSlide].author}
+                {testimonials[activeSlide].role && ` · ${testimonials[activeSlide].role}`}
+              </span>
             </div>
             
             <div className="carousel-dot-nav">
@@ -514,6 +639,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* FAQ Section */}
       <section className="faq-section">
@@ -805,165 +931,175 @@ export default function Home() {
         .featured-showcase-section {
           padding: 40px 0 100px;
         }
-        .showcase-card-layout {
-          display: grid;
-          grid-template-columns: 1fr 1.1fr;
-          gap: 60px;
-          padding: 60px;
-          align-items: center;
+        /* Clients & Numbers */
+        .clients-section {
+          padding: 20px 0 60px;
         }
-        .showcase-tag {
+        .stats-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          padding: 32px 0;
+          margin-bottom: 48px;
+          border-top: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--border-color);
+        }
+        .stat-tile {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 6px;
+        }
+        .stat-value {
+          font-family: var(--font-headings);
+          font-size: 44px;
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: #fff;
+          font-variant-numeric: tabular-nums;
+        }
+        .stat-label {
+          font-size: 12px;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .clients-title {
+          display: block;
           font-family: var(--font-headings);
           font-size: 11px;
+          font-weight: 600;
+          color: var(--text-muted);
+          letter-spacing: 0.15em;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+        .clients-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+        .clients-grid :global(.client-tile) {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 18px;
+          color: inherit;
+          text-decoration: none;
+        }
+        .clients-grid :global(.client-tile:hover) {
+          border-color: var(--accent-blue-border);
+          transform: translateY(-3px);
+        }
+        .client-mark {
+          flex-shrink: 0;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--font-headings);
+          font-size: 15px;
+          font-weight: 700;
+        }
+        .clients-grid :global(.client-tile-cta) {
+          border: 1px dashed var(--accent-blue-border);
+          border-radius: 16px;
+        }
+        .client-mark.cta { background: var(--accent-blue-glow); color: var(--accent-blue-light); font-size: 22px; }
+        .client-mark.blue { background: rgba(37, 99, 235, 0.12); color: var(--accent-blue-light); }
+        .client-mark.purple { background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); }
+        .client-mark.green { background: rgba(16, 185, 129, 0.12); color: var(--accent-green); }
+        .client-mark.orange { background: rgba(249, 115, 22, 0.12); color: #f97316; }
+        .client-mark.pink { background: rgba(236, 72, 153, 0.12); color: #ec4899; }
+        .client-info {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+        }
+        .client-name {
+          font-family: var(--font-headings);
+          font-size: 15px;
+          font-weight: 700;
+          color: #fff;
+        }
+        .client-work {
+          font-size: 13px;
+          color: var(--text-secondary);
+        }
+        .client-meta {
+          font-size: 11px;
+          color: var(--text-muted);
+          margin-top: 2px;
+        }
+
+        .work-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .work-card {
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+        }
+        .work-card:hover {
+          border-color: var(--accent-blue-border);
+          transform: translateY(-4px);
+        }
+        .work-tag {
+          font-family: var(--font-headings);
+          font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.15em;
           color: var(--accent-blue);
-          margin-bottom: 12px;
-          display: block;
+          margin-bottom: 10px;
         }
-        .showcase-title {
-          font-size: 42px;
-          margin-bottom: 20px;
+        .work-card h3 {
+          font-size: 22px;
+          margin-bottom: 10px;
         }
-        .showcase-desc {
-          font-size: 16px;
+        .work-desc {
+          font-size: 14px;
           line-height: 1.6;
-          margin-bottom: 30px;
+          margin-bottom: 20px;
         }
         .outcome-bullets {
           display: flex;
           flex-direction: column;
-          gap: 12px;
-          margin-bottom: 40px;
+          gap: 10px;
+          margin-bottom: 24px;
         }
         .bullet-item {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          font-size: 14px;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 13px;
           color: var(--text-secondary);
         }
-        .showcase-visual {
-          position: relative;
+        .bullet-item :global(svg) {
+          flex-shrink: 0;
+          margin-top: 3px;
+        }
+        .work-links {
           display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 340px;
-        }
-        .glow-mesh-center {
-          position: absolute;
-          width: 260px;
-          height: 260px;
-          background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(37, 99, 235, 0.02) 60%, rgba(0,0,0,0) 80%);
-          filter: blur(30px);
-        }
-        .browser-mockup-frame {
-          width: 100%;
-          max-width: 440px;
-          height: 260px;
-          background: #11141d;
-          border: 1px solid var(--border-color);
-          border-radius: 12px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-          overflow: hidden;
-          z-index: 2;
-          display: flex;
-          flex-direction: column;
-        }
-        .browser-bar {
-          height: 32px;
-          background: #191e2b;
-          border-bottom: 1px solid var(--border-color);
-          display: flex;
-          align-items: center;
-          padding: 0 12px;
-        }
-        .dots-row {
-          display: flex;
-          gap: 6px;
-          margin-right: 20px;
-        }
-        .b-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-        }
-        .b-dot.red { background: #ef4444; }
-        .b-dot.yellow { background: #f59e0b; }
-        .b-dot.green { background: #10b981; }
-        .browser-url {
-          font-size: 10px;
-          color: var(--text-muted);
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-color);
-          padding: 1px 12px;
-          border-radius: 4px;
-          flex-grow: 1;
-          max-width: 240px;
-          margin: 0 auto;
-          text-align: center;
-        }
-        .browser-mock-body {
-          flex-grow: 1;
-          display: grid;
-          grid-template-columns: 100px 1fr;
-        }
-        .mock-sidebar {
-          background: #0b0e16;
-          border-right: 1px solid var(--border-color);
-          padding: 12px;
-          display: flex;
-          flex-direction: column;
           gap: 16px;
+          flex-wrap: wrap;
+          margin-top: auto;
         }
-        .mock-logo {
-          font-size: 9px;
-          font-weight: 700;
+        .work-links :global(.work-link) {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--accent-blue-light);
+        }
+        .work-links :global(.work-link:hover) {
           color: #fff;
-          margin-bottom: 10px;
-        }
-        .mock-nav-item {
-          height: 8px;
-          width: 80%;
-          background: rgba(255, 255, 255, 0.02);
-          border-radius: 2px;
-        }
-        .mock-nav-item.active {
-          background: var(--accent-blue-border);
-        }
-        .mock-main {
-          padding: 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          background: #0b0e14;
-        }
-        .mock-grid-row {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 8px;
-        }
-        .mock-box {
-          height: 24px;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-color);
-          border-radius: 4px;
-        }
-        .mock-chart-box {
-          flex-grow: 1;
-          background: rgba(255, 255, 255, 0.01);
-          border: 1px solid var(--border-color);
-          border-radius: 6px;
-          position: relative;
-          min-height: 80px;
-        }
-        .mock-chart-line {
-          position: absolute;
-          bottom: 10px;
-          left: 10px;
-          width: 80%;
-          height: 2px;
-          background: var(--accent-blue-border);
         }
 
         /* Services Grid */
@@ -1065,6 +1201,10 @@ export default function Home() {
           font-style: italic;
           line-height: 1.6;
           max-width: 600px;
+        }
+        .testimonial-author {
+          font-size: 14px;
+          color: var(--text-secondary);
         }
         .carousel-dot-nav {
           display: flex;
@@ -1215,10 +1355,11 @@ export default function Home() {
             min-height: 460px;
             padding: 20px 0;
           }
-          .showcase-card-layout {
-            grid-template-columns: 1fr;
-            padding: 40px 24px;
-            gap: 40px;
+          .work-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .clients-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
           .services-grid-outcomes {
             grid-template-columns: 1fr;
@@ -1239,8 +1380,15 @@ export default function Home() {
           .hero-heading-outcome {
             font-size: 38px;
           }
-          .showcase-title {
-            font-size: 32px;
+          .work-grid {
+            grid-template-columns: 1fr;
+          }
+          .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 28px;
+          }
+          .stat-value {
+            font-size: 36px;
           }
           .highlights-grid {
             justify-content: center;
@@ -1260,6 +1408,9 @@ export default function Home() {
           }
           .highlight-stat-item {
             flex: 1 1 100% !important;
+          }
+          .clients-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
